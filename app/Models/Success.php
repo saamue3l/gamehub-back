@@ -10,34 +10,37 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Forum
+ * Class Success
  *
- * @property int $forumId
+ * @property int $successId
  * @property string $name
+ * @property string|null $description
  *
- * @property Collection|Topic[] $topics
+ * @property Collection|AchievedSuccess[] $achievedsuccesses
  *
  * @package App\Models
  */
-class Forum extends Model
+class Success extends Model
 {
-	protected $table = 'forum';
-	protected $primaryKey = 'forumId';
+	protected $table = 'success';
+	protected $primaryKey = 'successId';
 	public $timestamps = false;
 
 	protected $fillable = [
-		'name'
+		'name',
+		'description'
 	];
 
     public static function rules(): array
     {
         return [
             'name' => 'required|string|max:100',
+            'description' => 'nullable|string',
         ];
     }
 
-    public function topics()
+    public function achievedsuccesses()
 	{
-		return $this->hasMany(Topic::class, 'forumId');
+		return $this->hasMany(AchievedSuccess::class, 'successId');
 	}
 }

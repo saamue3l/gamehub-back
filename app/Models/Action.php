@@ -12,39 +12,40 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Action
  *
- * @property int $idAction
- * @property int $xpGagne
- * @property string $typeAction
+ * @property int $actionId
+ * @property int $xpEarned
+ * @property string $actionType
  *
- * @property Collection|HistoriqueAction[] $historiqueactions
+ * @property Collection|ActionHistory[] $actionhistories
  *
  * @package App\Models
  */
 class Action extends Model
 {
 	protected $table = 'action';
-	protected $primaryKey = 'idAction';
+	protected $primaryKey = 'actionId';
 	public $timestamps = false;
 
 	protected $casts = [
-		'xpGagne' => 'int'
+		'xpEarned' => 'int'
 	];
 
 	protected $fillable = [
-		'xpGagne',
-		'typeAction'
+		'xpEarned',
+		'actionType'
 	];
 
-    public static function rules()
+    public static function rules(): array
     {
         return [
-            'xpGagne' => 'required|integer',
-            'typeAction' => 'required|string|max:255'
+            'xpEarned' => 'required|integer|min:0',
+            'actionType' => 'required|string|max:100',
         ];
     }
 
-	public function historiqueactions()
+
+    public function actionhistories()
 	{
-		return $this->hasMany(HistoriqueAction::class, 'idAction');
+		return $this->hasMany(ActionHistory::class, 'actionId');
 	}
 }

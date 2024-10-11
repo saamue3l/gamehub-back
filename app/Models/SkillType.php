@@ -10,19 +10,19 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Role
+ * Class SkillType
  *
- * @property int $roleId
+ * @property int $skillTypeId
  * @property string $label
  *
- * @property Collection|User[] $users
+ * @property Collection|FavoriteGame[] $favoritegames
  *
  * @package App\Models
  */
-class Role extends Model
+class SkillType extends Model
 {
-	protected $table = 'role';
-	protected $primaryKey = 'roleId';
+	protected $table = 'skilltype';
+	protected $primaryKey = 'skillTypeId';
 	public $timestamps = false;
 
 	protected $fillable = [
@@ -36,9 +36,8 @@ class Role extends Model
         ];
     }
 
-
-    public function users()
+    public function favoritegames()
 	{
-		return $this->hasMany(User::class, 'roleId');
+		return $this->hasMany(FavoriteGame::class, 'skillTypeId');
 	}
 }

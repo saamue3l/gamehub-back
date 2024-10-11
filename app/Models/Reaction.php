@@ -11,13 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Reaction
  *
- * @property int $idReaction
- * @property int $idTypeReaction
- * @property int $idUtilisateur
- * @property int $idPost
+ * @property int $reactionId
+ * @property int $reactionTypeId
+ * @property int $userId
+ * @property int $postId
  *
- * @property TypeReaction $typereaction
- * @property Utilisateur $utilisateur
+ * @property ReactionType $reactiontype
+ * @property User $user
  * @property Post $post
  *
  * @package App\Models
@@ -25,42 +25,43 @@ use Illuminate\Database\Eloquent\Model;
 class Reaction extends Model
 {
 	protected $table = 'reaction';
-	protected $primaryKey = 'idReaction';
+	protected $primaryKey = 'reactionId';
 	public $timestamps = false;
 
 	protected $casts = [
-		'idTypeReaction' => 'int',
-		'idUtilisateur' => 'int',
-		'idPost' => 'int'
+		'reactionTypeId' => 'int',
+		'userId' => 'int',
+		'postId' => 'int'
 	];
 
 	protected $fillable = [
-		'idTypeReaction',
-		'idUtilisateur',
-		'idPost'
+		'reactionTypeId',
+		'userId',
+		'postId'
 	];
 
-    public static function rules()
+    public static function rules(): array
     {
         return [
-            'idTypeReaction' => 'required|integer',
-            'idUtilisateur' => 'required|integer',
-            'idPost' => 'required|integer'
+            'reactionTypeId' => 'required|integer|exists:reactiontype,reactionTypeId',
+            'userId' => 'required|integer|exists:user,userId',
+            'postId' => 'required|integer|exists:post,postId',
         ];
     }
 
-	public function typereaction()
+
+    public function reactiontype()
 	{
-		return $this->belongsTo(TypeReaction::class, 'idTypeReaction');
+		return $this->belongsTo(ReactionType::class, 'reactionTypeId');
 	}
 
-	public function utilisateur()
+	public function user()
 	{
-		return $this->belongsTo(Utilisateur::class, 'idUtilisateur');
+		return $this->belongsTo(User::class, 'userId');
 	}
 
 	public function post()
 	{
-		return $this->belongsTo(Post::class, 'idPost');
+		return $this->belongsTo(Post::class, 'postId');
 	}
 }

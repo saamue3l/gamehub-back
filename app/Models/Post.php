@@ -13,16 +13,16 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Post
  *
- * @property int $idPost
- * @property string $contenu
- * @property Carbon|null $dateCreation
- * @property int $idUtilisateur
- * @property int $idSujet
- * @property int $idStatutPost
+ * @property int $postId
+ * @property string $content
+ * @property Carbon|null $creationDate
+ * @property int $userId
+ * @property int $topicId
+ * @property int $postStatusId
  *
- * @property Utilisateur $utilisateur
- * @property Sujet $sujet
- * @property StatutPost $statutpost
+ * @property User $user
+ * @property Topic $topic
+ * @property PostStatus $poststatus
  * @property Collection|Reaction[] $reactions
  *
  * @package App\Models
@@ -30,51 +30,53 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
 	protected $table = 'post';
-	protected $primaryKey = 'idPost';
+	protected $primaryKey = 'postId';
 	public $timestamps = false;
 
 	protected $casts = [
-		'dateCreation' => 'datetime',
-		'idUtilisateur' => 'int',
-		'idSujet' => 'int',
-		'idStatutPost' => 'int'
+		'creationDate' => 'datetime',
+		'userId' => 'int',
+		'topicId' => 'int',
+		'postStatusId' => 'int'
 	];
 
 	protected $fillable = [
-		'contenu',
-		'dateCreation',
-		'idUtilisateur',
-		'idSujet',
-		'idStatutPost'
+		'content',
+		'creationDate',
+		'userId',
+		'topicId',
+		'postStatusId'
 	];
 
-    public static function rules()
+    public static function rules(): array
     {
         return [
-            'contenu' => 'required|string|max:1000',
-            'idUtilisateur' => 'required|integer',
-            'idSujet' => 'required|integer',
-            'idStatutPost' => 'required|integer',
+            'content' => 'required|string',
+            'creationDate' => 'nullable|date',
+            'userId' => 'required|integer|exists:user,userId',
+            'topicId' => 'required|integer|exists:topic,topicId',
+            'postStatusId' => 'required|integer|exists:poststatus,postStatusId',
         ];
     }
 
-	public function utilisateur()
+
+    public function user()
 	{
-		return $this->belongsTo(Utilisateur::class, 'idUtilisateur');
+		return $this->belongsTo(User::class, 'userId');
 	}
 
-	public function sujet()
+	public function topic()
 	{
-		return $this->belongsTo(Sujet::class, 'idSujet');
+		return $this->belongsTo(Topic::class, 'topicId');
 	}
 
-	public function statutpost()
+	public function poststatus()
 	{
-		return $this->belongsTo(StatutPost::class, 'idStatutPost');
+		return $this->belongsTo(PostStatus::class, 'postStatusId');
 	}
 
 	public function reactions()
 	{
-		return $this->hasMany(Reaction::class, 'idPost');
+		return $this->hasMany(Reaction::class, 'postId');
 	}
 }

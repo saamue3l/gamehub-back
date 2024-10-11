@@ -10,19 +10,19 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Role
+ * Class Status
  *
- * @property int $roleId
+ * @property int $statusId
  * @property string $label
  *
  * @property Collection|User[] $users
  *
  * @package App\Models
  */
-class Role extends Model
+class Status extends Model
 {
-	protected $table = 'role';
-	protected $primaryKey = 'roleId';
+	protected $table = 'status';
+	protected $primaryKey = 'statusId';
 	public $timestamps = false;
 
 	protected $fillable = [
@@ -36,9 +36,8 @@ class Role extends Model
         ];
     }
 
-
     public function users()
 	{
-		return $this->hasMany(User::class, 'roleId');
+		return $this->hasMany(User::class, 'statusId');
 	}
 }

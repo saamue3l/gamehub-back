@@ -9,45 +9,48 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Participation
+ * Class Username
  *
- * @property int $participationId
- * @property int $eventId
+ * @property int $usernameId
+ * @property string $username
+ * @property int $platformId
  * @property int $userId
  *
- * @property Event $event
+ * @property Platform $platform
  * @property User $user
  *
  * @package App\Models
  */
-class Participation extends Model
+class Username extends Model
 {
-	protected $table = 'participation';
-	protected $primaryKey = 'participationId';
+	protected $table = 'username';
+	protected $primaryKey = 'usernameId';
 	public $timestamps = false;
 
 	protected $casts = [
-		'eventId' => 'int',
+		'platformId' => 'int',
 		'userId' => 'int'
 	];
 
 	protected $fillable = [
-		'eventId',
+		'username',
+		'platformId',
 		'userId'
 	];
 
     public static function rules(): array
     {
         return [
-            'eventId' => 'required|integer|exists:event,eventId',
+            'username' => 'required|string|max:50',
+            'platformId' => 'required|integer|exists:platform,platformId',
             'userId' => 'required|integer|exists:user,userId',
         ];
     }
 
 
-    public function event()
+    public function platform()
 	{
-		return $this->belongsTo(Event::class, 'eventId');
+		return $this->belongsTo(Platform::class, 'platformId');
 	}
 
 	public function user()
