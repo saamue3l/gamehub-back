@@ -64,7 +64,7 @@ class MatchmakingTest extends TestCase
     public function it_fails_when_user_is_not_authenticated()
     {
         // On envoie la requête sans authentifier l'utilisateur
-        $response = $this->postJson('/api/match', [
+        $response = $this->postJson('/api/matchmaking', [
             'requestedGames' => [
                 ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
             ],
@@ -88,7 +88,7 @@ class MatchmakingTest extends TestCase
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/match', $requestedGames);
+        $response = $this->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier le statut de la réponse
         $response->assertStatus(200);
@@ -119,7 +119,7 @@ class MatchmakingTest extends TestCase
         ];
 
         // Simuler la réponse
-        $response = $this->postJson('/api/match', $requestedGames);
+        $response = $this->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier le statut de la réponse
         $response->assertStatus(200);
@@ -171,7 +171,7 @@ class MatchmakingTest extends TestCase
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/match', $requestedGames);
+        $response = $this->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);
@@ -195,7 +195,7 @@ class MatchmakingTest extends TestCase
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/match', $requestedGames);
+        $response = $this->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);
@@ -216,7 +216,7 @@ class MatchmakingTest extends TestCase
         $requestedGames = [];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/match', $requestedGames);
+        $response = $this->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);
@@ -239,7 +239,7 @@ class MatchmakingTest extends TestCase
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/match', $requestedGames);
+        $response = $this->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);

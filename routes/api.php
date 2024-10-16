@@ -23,6 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 //Route::post('/match', [MatchController::class, 'match']);
-Route::middleware('auth:sanctum')->post('/match', [MatchController::class, 'match']);
+Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class, 'match']);
 
 
