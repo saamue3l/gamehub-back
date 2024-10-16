@@ -16,8 +16,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('maxPlayers');
             $table->timestamp('eventDate');
-            $table->integer('userId')->index('userid');
-            $table->integer('gameId')->index('gameid');
+            $table->integer('userId')->index('event_userid_index');
+            $table->integer('gameId')->index('event_gameid_index');
         });
     }
 

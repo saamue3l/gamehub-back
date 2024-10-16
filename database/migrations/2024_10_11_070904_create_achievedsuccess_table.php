@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('achievedsuccess', function (Blueprint $table) {
             $table->integer('userId');
-            $table->integer('successId')->index('successid');
+            $table->integer('successId')->index('achievedsuccess_successid_index');
             $table->date('achievementDate');
 
             $table->primary(['userId', 'successId']);

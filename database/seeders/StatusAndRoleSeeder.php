@@ -11,8 +11,8 @@ class StatusAndRoleSeeder extends Seeder
     {
         // Insertion des statuts
         DB::table('status')->insert([
-            ['statusId' => 1, 'label' => 'Actif'],
-            ['statusId' => 2, 'label' => 'Banni'],
+            ['statusId' => 1, 'label' => 'Active'],
+            ['statusId' => 2, 'label' => 'Banned'],
         ]);
 
         // Insertion des rôles

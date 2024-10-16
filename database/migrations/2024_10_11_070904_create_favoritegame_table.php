@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('favoritegame', function (Blueprint $table) {
             $table->integer('favoriteGameId', true);
             $table->text('description')->nullable();
-            $table->integer('platformId')->index('platformid');
-            $table->integer('skillTypeId')->index('skilltypeid');
-            $table->integer('gameId')->index('gameid');
-            $table->integer('userId')->index('userid');
+            $table->integer('platformId')->index('favoritegame_platformid_index');
+            $table->integer('skillTypeId')->index('favoritegame_skilltypeid_index');
+            $table->integer('gameId')->index('favoritegame_gameid_index');
+            $table->integer('userId')->index('favoritegame_userid_index');
         });
     }
 

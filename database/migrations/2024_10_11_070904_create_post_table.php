@@ -15,9 +15,9 @@ return new class extends Migration
             $table->integer('postId', true);
             $table->text('content');
             $table->timestamp('creationDate')->nullable()->useCurrent();
-            $table->integer('userId')->index('userid');
-            $table->integer('topicId')->index('topicid');
-            $table->integer('postStatusId')->index('poststatusid');
+            $table->integer('userId')->index('post_userid_index');
+            $table->integer('topicId')->index('post_topicid_index');
+            $table->integer('postStatusId')->index('post_poststatusid_index');
         });
     }
 

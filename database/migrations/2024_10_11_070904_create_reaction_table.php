@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('reaction', function (Blueprint $table) {
             $table->integer('reactionId', true);
-            $table->integer('reactionTypeId')->index('reactiontypeid');
-            $table->integer('userId')->index('userid');
-            $table->integer('postId')->index('postid');
+            $table->integer('reactionTypeId')->index('reaction_reactiontypeid_index');
+            $table->integer('userId')->index('reaction_userid_index');
+            $table->integer('postId')->index('reaction_postid_index');
         });
     }
 

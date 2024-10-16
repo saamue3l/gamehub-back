@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('username', function (Blueprint $table) {
             $table->integer('usernameId', true);
             $table->string('username', 50);
-            $table->integer('platformId')->index('platformid');
-            $table->integer('userId')->index('userid');
+            $table->integer('platformId')->index('username_platformid_index');
+            $table->integer('userId')->index('username_userid_index');
         });
     }
 
