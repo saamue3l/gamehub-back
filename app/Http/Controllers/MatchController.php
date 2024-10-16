@@ -18,11 +18,19 @@ class MatchController extends Controller
             '*.skillTypeId' => 'required|integer',
         ]);
 
+        // Si le tableau des jeux est vide
+        if (empty($validated)) {
+            return response()->json([
+                'message' => 'The requestedGames array must contain at least one game.',
+                'errors' => ['requestedGames' => ['The requestedGames array is required.']],
+            ], 422);
+        }
+
         // Récupérer les jeux demandés
         $requestedGames = $validated;
 
         // Récupérer les utilisateurs avec le compte des jeux correspondants
-        $users = User::where('statusId', 1) // Filtrer les utilisateurs actifs
+        $users = User::where('statusId', 1) // Filtrer les utilisateurs actifs (non bannis)
         ->whereHas('favoriteGames', function($query) use ($requestedGames) {
             $query->where(function ($q) use ($requestedGames) {
                 foreach ($requestedGames as $game) {
@@ -62,14 +70,14 @@ class MatchController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'No users found matching the criteria.',
-                'data' => [],
+                'matchResult' => [],
             ], 200);
         }
 
         // Retourner les résultats
         return response()->json([
             'status' => 'success',
-            'data' => $users
+            'matchResult' => $users
         ]);
     }
 }
