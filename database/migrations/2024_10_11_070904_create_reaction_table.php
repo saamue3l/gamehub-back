@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reaction', function (Blueprint $table) {
-            $table->integer('reactionId', true);
-            $table->integer('reactionTypeId')->index('reaction_reactiontypeid_index');
-            $table->integer('userId')->index('reaction_userid_index');
-            $table->integer('postId')->index('reaction_postid_index');
+            $table->id();
+
+            $table->foreignIdFor(\App\Models\User::class, "userId");
+            $table->foreignIdFor(\App\Models\ReactionType::class, "reactionTypeId");
+            $table->foreignIdFor(\App\Models\Post::class, "postId");
         });
     }
 

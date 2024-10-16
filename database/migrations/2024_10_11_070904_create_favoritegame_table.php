@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('favoritegame', function (Blueprint $table) {
-            $table->integer('favoriteGameId', true);
+            $table->id();
             $table->text('description')->nullable();
-            $table->integer('platformId')->index('favoritegame_platformid_index');
-            $table->integer('skillTypeId')->index('favoritegame_skilltypeid_index');
-            $table->integer('gameId')->index('favoritegame_gameid_index');
-            $table->integer('userId')->index('favoritegame_userid_index');
+            $table->foreignIdFor(\App\Models\User::class, "userId");
+            $table->foreignIdFor(\App\Models\Game::class, "gameId");
+            $table->foreignIdFor(\App\Models\Platform::class, "platformId");
+            $table->foreignIdFor(\App\Models\SkillType::class, "skillTypeId");
         });
     }
 

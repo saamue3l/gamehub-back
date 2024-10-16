@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user', function (Blueprint $table) {
-            $table->integer('userId', true);
-            $table->string('username', 50)->unique('user_username_index');
-            $table->string('email', 100)->unique('email');
+            $table->id();
+            $table->string('username', 50)->unique();
+            $table->string('email', 100)->unique();
             $table->string('password');
             $table->text('picture')->nullable();
-            $table->integer('xp')->nullable()->default(0);
-            $table->integer('statusId')->index('user_statusid_index');
-            $table->integer('roleId')->index('user_roleid_index');
+            $table->integer('xp')->default(0);
+
+            $table->foreignIdFor(\App\Models\Status::class, "statusId");
+            $table->foreignIdFor(\App\Models\Role::class, "roleId");
         });
     }
 

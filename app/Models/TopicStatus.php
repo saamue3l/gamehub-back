@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
 class TopicStatus extends Model
 {
 	protected $table = 'topicstatus';
-	protected $primaryKey = 'topicStatusId';
 	public $timestamps = false;
 
 	protected $fillable = [

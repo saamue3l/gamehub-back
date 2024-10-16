@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Model;
 class Username extends Model
 {
 	protected $table = 'username';
-	protected $primaryKey = 'usernameId';
 	public $timestamps = false;
 
 	protected $casts = [

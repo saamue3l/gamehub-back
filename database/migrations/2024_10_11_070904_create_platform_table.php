@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('platform', function (Blueprint $table) {
-            $table->integer('platformId', true);
+            $table->id();
             $table->string('name', 100);
+            $table->string('logoUrlId', 120)->nullable();
         });
     }
 

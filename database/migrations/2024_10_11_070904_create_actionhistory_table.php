@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('actionhistory', function (Blueprint $table) {
-            $table->integer('userId');
-            $table->integer('actionId')->index('actionhistory_actionid_index');
+            $table->foreignIdFor(\App\Models\User::class, "userId");
+            $table->foreignIdFor(\App\Models\Action::class, "actionId");
             $table->timestamp('actionDate')->useCurrent();
 
             $table->primary(['userId', 'actionId']);

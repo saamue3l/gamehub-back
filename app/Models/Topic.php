@@ -28,7 +28,6 @@ use Illuminate\Database\Eloquent\Model;
 class Topic extends Model
 {
 	protected $table = 'topic';
-	protected $primaryKey = 'topicId';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -60,9 +59,9 @@ class Topic extends Model
 		return $this->belongsTo(Forum::class, 'forumId');
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(User::class, 'userId');
+	public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+		return $this->belongsTo(User::class, 'creatorId');
 	}
 
 	public function topicstatus()

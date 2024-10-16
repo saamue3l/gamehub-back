@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
 class SkillType extends Model
 {
 	protected $table = 'skilltype';
-	protected $primaryKey = 'skillTypeId';
 	public $timestamps = false;
 
 	protected $fillable = [

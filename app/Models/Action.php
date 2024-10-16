@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Model;
 class Action extends Model
 {
 	protected $table = 'action';
-	protected $primaryKey = 'actionId';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -44,8 +43,8 @@ class Action extends Model
     }
 
 
-    public function actionhistories()
-	{
-		return $this->hasMany(ActionHistory::class, 'actionId');
-	}
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'actionhistory', 'actionId', 'userId')->withPivot('actionDate');
+    }
 }

@@ -90,14 +90,14 @@ class User extends Authenticatable
 		return $this->belongsTo(Role::class, 'roleId');
 	}
 
-	public function achievedsuccesses()
+	public function successes()
 	{
-		return $this->hasMany(AchievedSuccess::class, 'userId');
+        return $this->belongsToMany(Success::class, "achievedsuccess", "userId", "successId")->withPivot("achievementDate");
 	}
 
-	public function actionhistories()
+	public function actions()
 	{
-		return $this->hasMany(ActionHistory::class, 'userId');
+		return $this->belongsToMany(Action::class, 'actionhistory', 'userId', 'actionId')->withPivot('actionDate');
 	}
 
 	public function availabilities()
@@ -105,8 +105,8 @@ class User extends Authenticatable
 		return $this->hasMany(Availability::class, 'userId');
 	}
 
-	public function events()
-	{
+	public function createdEvents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
 		return $this->hasMany(Event::class, 'userId');
 	}
 
@@ -117,8 +117,8 @@ class User extends Authenticatable
 
 	public function participations()
 	{
-		return $this->hasMany(Participation::class, 'userId');
-	}
+        return $this->belongsToMany(Event::class, 'participation', 'userId', 'eventId');
+    }
 
 	public function posts()
 	{
@@ -130,12 +130,12 @@ class User extends Authenticatable
 		return $this->hasMany(Reaction::class, 'userId');
 	}
 
-	public function topics()
+	public function createdTopics()
 	{
 		return $this->hasMany(Topic::class, 'userId');
 	}
 
-	public function usernames()
+	public function gamesUsernames()
 	{
 		return $this->hasMany(Username::class, 'userId');
 	}

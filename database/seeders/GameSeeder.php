@@ -15,9 +15,9 @@ class GameSeeder extends Seeder
         // Insertion de 10 jeux multijoueurs
         for ($i = 1; $i <= 20; $i++) {
             DB::table('game')->insert([
-                'gameId' => $i,
+                'id' => $i,
                 'name' => $faker->words(3, true),  // Génère un nom de jeu aléatoire
-                'cover' => $faker->imageUrl(640, 480, 'games', true, 'multiplayer game'),  // Génère une URL aléatoire pour la cover
+                'coverUrlId' => $faker->imageUrl(640, 480, 'games', true, 'multiplayer game'),  // Génère une URL aléatoire pour la cover
             ]);
         }
     }

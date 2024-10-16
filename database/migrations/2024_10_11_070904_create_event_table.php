@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('event', function (Blueprint $table) {
-            $table->integer('eventId', true);
+            $table->id();
             $table->text('description')->nullable();
             $table->integer('maxPlayers');
             $table->timestamp('eventDate');
-            $table->integer('userId')->index('event_userid_index');
-            $table->integer('gameId')->index('event_gameid_index');
+            $table->foreignIdFor(\App\Models\User::class, "creatorId");
+            $table->foreignIdFor(\App\Models\Game::class, "gameId");
         });
     }
 

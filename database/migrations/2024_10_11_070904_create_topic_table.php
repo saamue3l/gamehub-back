@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('topic', function (Blueprint $table) {
-            $table->integer('topicId', true);
+            $table->id();
             $table->string('title', 200);
-            $table->integer('forumId')->index('topic_forumid_index');
-            $table->integer('userId')->index('topic_userid_index');
-            $table->integer('topicStatusId')->index('topic_topicstatusid_index');
+
+            $table->foreignIdFor(\App\Models\User::class, "creatorId");
+            $table->foreignIdFor(\App\Models\Forum::class, "forumId");
+            $table->foreignIdFor(\App\Models\TopicStatus::class, "topicStatusId");
         });
     }
 

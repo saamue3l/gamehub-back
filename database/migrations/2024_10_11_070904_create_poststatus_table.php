@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('poststatus', function (Blueprint $table) {
-            $table->integer('postStatusId', true);
+            $table->id();
             $table->string('label', 100);
         });
     }

@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\Model;
 class Reaction extends Model
 {
 	protected $table = 'reaction';
-	protected $primaryKey = 'reactionId';
 	public $timestamps = false;
 
 	protected $casts = [

@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Model;
 class Availability extends Model
 {
 	protected $table = 'availability';
-	protected $primaryKey = 'availabilityId';
 	public $timestamps = false;
 
 	protected $casts = [

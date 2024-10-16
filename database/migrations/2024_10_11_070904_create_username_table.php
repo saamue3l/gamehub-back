@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('username', function (Blueprint $table) {
-            $table->integer('usernameId', true);
+            $table->id();
             $table->string('username', 50);
-            $table->integer('platformId')->index('username_platformid_index');
-            $table->integer('userId')->index('username_userid_index');
+
+            $table->foreignIdFor(\App\Models\User::class, "userId");
+            $table->foreignIdFor(\App\Models\Platform::class, "platformId");
         });
     }
 

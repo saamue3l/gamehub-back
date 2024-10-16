@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Model;
 class Success extends Model
 {
 	protected $table = 'success';
-	protected $primaryKey = 'successId';
 	public $timestamps = false;
 
 	protected $fillable = [
@@ -39,8 +38,8 @@ class Success extends Model
         ];
     }
 
-    public function achievedsuccesses()
+    public function usersWithSuccess()
 	{
-		return $this->hasMany(AchievedSuccess::class, 'successId');
+		return $this->belongsToMany(User::class, "achievedsuccess", "successId", "userId")->withPivot("achievementDate");
 	}
 }

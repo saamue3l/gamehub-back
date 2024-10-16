@@ -31,7 +31,6 @@ class FavoriteGame extends Model
     use HasFactory;
 
 	protected $table = 'favoritegame';
-	protected $primaryKey = 'favoriteGameId';
 	public $timestamps = false;
 
 	protected $casts = [

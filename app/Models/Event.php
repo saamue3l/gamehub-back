@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
 	protected $table = 'event';
-	protected $primaryKey = 'eventId';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -59,18 +58,18 @@ class Event extends Model
     }
 
 
-    public function user()
-	{
-		return $this->belongsTo(User::class, 'userId');
+    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+		return $this->belongsTo(User::class, 'creatorId');
 	}
 
-	public function game()
-	{
+    public function participants(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'participation', 'eventId', 'userId');
+    }
+
+	public function game(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
 		return $this->belongsTo(Game::class, 'gameId');
-	}
-
-	public function participations()
-	{
-		return $this->hasMany(Participation::class, 'eventId');
 	}
 }

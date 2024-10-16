@@ -37,10 +37,15 @@ class Platform extends Model
         ];
     }
 
-    public function favoritegames()
-	{
-		return $this->hasMany(FavoriteGame::class, 'platformId');
-	}
+    /**
+     * Games that support this platform
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function games(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, 'game_platform');
+    }
 
 	public function usernames()
 	{

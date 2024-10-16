@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
 class ReactionType extends Model
 {
 	protected $table = 'reactiontype';
-	protected $primaryKey = 'reactionTypeId';
 	public $timestamps = false;
 
 	protected $fillable = [

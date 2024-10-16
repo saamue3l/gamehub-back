@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('game', function (Blueprint $table) {
-            $table->integer('gameId', true);
+            $table->id();
             $table->string('name', 100);
-            $table->text('cover')->nullable();
+            $table->string('coverUrlId', 120)->nullable();
         });
     }
 

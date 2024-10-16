@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
 class PostStatus extends Model
 {
 	protected $table = 'poststatus';
-	protected $primaryKey = 'postStatusId';
 	public $timestamps = false;
 
 	protected $fillable = [

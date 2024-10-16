@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Model;
 class Game extends Model
 {
 	protected $table = 'game';
-	protected $primaryKey = 'gameId';
 	public $timestamps = false;
 
 	protected $fillable = [
@@ -40,14 +39,23 @@ class Game extends Model
         ];
     }
 
+    /**
+     * Platforms supported by this game
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function platforms(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Platform::class, 'game_platform');
+    }
 
-    public function events()
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
 	{
 		return $this->hasMany(Event::class, 'gameId');
 	}
 
-	public function favoritegames()
-	{
+	public function favorites(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
 		return $this->hasMany(FavoriteGame::class, 'gameId');
 	}
 }

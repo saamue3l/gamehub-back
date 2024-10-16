@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('availability', function (Blueprint $table) {
-            $table->integer('availabilityId', true);
+            $table->id();
             $table->string('dayOfWeek', 20);
             $table->boolean('morning')->nullable()->default(false);
             $table->boolean('afternoon')->nullable()->default(false);
             $table->boolean('evening')->nullable()->default(false);
             $table->boolean('night')->nullable()->default(false);
-            $table->integer('userId')->index('availability_userid_index');
+            $table->foreignIdFor(\App\Models\User::class, "userId");
         });
     }
 

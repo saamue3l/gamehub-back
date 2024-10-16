@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('participation', function (Blueprint $table) {
-            $table->integer('participationId', true);
-            $table->integer('eventId')->index('participation_eventid_index');
-            $table->integer('userId')->index('participation_userid_index');
+            $table->id();
+            $table->foreignIdFor(\App\Models\User::class, "userId");
+            $table->foreignIdFor(\App\Models\Event::class, "eventId");
         });
     }
 

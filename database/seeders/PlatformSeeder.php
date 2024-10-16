@@ -11,10 +11,10 @@ class PlatformSeeder extends Seeder
     {
         // Insérer les plateformes de jeu
         Platform::insert([
-            ['platformId' => 1, 'name' => 'PC'],
-            ['platformId' => 2, 'name' => 'Playstation'],
-            ['platformId' => 3, 'name' => 'Xbox'],
-            ['platformId' => 4, 'name' => 'Switch'],
+            ['id' => 1, 'name' => 'PC'],
+            ['id' => 2, 'name' => 'Playstation'],
+            ['id' => 3, 'name' => 'Xbox'],
+            ['id' => 4, 'name' => 'Switch'],
         ]);
     }
 }

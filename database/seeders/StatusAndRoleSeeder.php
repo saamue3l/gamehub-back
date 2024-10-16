@@ -11,14 +11,14 @@ class StatusAndRoleSeeder extends Seeder
     {
         // Insertion des statuts
         DB::table('status')->insert([
-            ['statusId' => 1, 'label' => 'Active'],
-            ['statusId' => 2, 'label' => 'Banned'],
+            ['id' => 1, 'label' => 'Active'],
+            ['id' => 2, 'label' => 'Banned'],
         ]);
 
         // Insertion des rôles
         DB::table('role')->insert([
-            ['roleId' => 1, 'label' => 'Admin'],
-            ['roleId' => 2, 'label' => 'Member'],
+            ['id' => 1, 'label' => 'Admin'],
+            ['id' => 2, 'label' => 'Member'],
         ]);
     }
 }

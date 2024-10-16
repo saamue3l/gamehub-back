@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('availability', function (Blueprint $table) {
-            $table->foreign(['userId'], 'availability_ibfk_1')->references(['userId'])->on('user')->onUpdate('no action')->onDelete('cascade');
+        Schema::create('game_platform', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignIdFor(\App\Models\Game::class, "gameId");
+            $table->foreignIdFor(\App\Models\Platform::class, "platformId");
+
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('availability', function (Blueprint $table) {
-            $table->dropForeign('availability_ibfk_1');
-        });
+        Schema::dropIfExists('game_platform');
     }
 };

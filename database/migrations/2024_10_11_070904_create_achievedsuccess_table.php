@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('achievedsuccess', function (Blueprint $table) {
-            $table->integer('userId');
-            $table->integer('successId')->index('achievedsuccess_successid_index');
+            $table->foreignIdFor(\App\Models\User::class, "userId");
+            $table->foreignIdFor(\App\Models\Success::class, "successId");
             $table->date('achievementDate');
 
             $table->primary(['userId', 'successId']);
