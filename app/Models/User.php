@@ -44,7 +44,6 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory;
 
 	protected $table = 'user';
-	protected $primaryKey = 'userId';
 	public $timestamps = false;
 
 	protected $casts = [

@@ -16,8 +16,6 @@ return new class extends Migration
 
             $table->foreignIdFor(\App\Models\Game::class, "gameId");
             $table->foreignIdFor(\App\Models\Platform::class, "platformId");
-
-            $table->timestamps();
         });
     }
 

@@ -7,12 +7,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Platform
  *
- * @property int $platformId
+ * @property int $id
  * @property string $name
  *
  * @property Collection|FavoriteGame[] $favoritegames
@@ -22,8 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Platform extends Model
 {
+    use hasFactory;
+
 	protected $table = 'platform';
-	protected $primaryKey = 'platformId';
 	public $timestamps = false;
 
 	protected $fillable = [
@@ -44,7 +46,7 @@ class Platform extends Model
      */
     public function games(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Game::class, 'game_platform');
+        return $this->belongsToMany(Game::class, 'game_platform', 'platformId', 'gameId');
     }
 
 	public function usernames()

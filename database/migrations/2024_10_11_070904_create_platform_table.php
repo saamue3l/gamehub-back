@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('platform', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('logoUrlId', 120)->nullable();
+            $table->string('name', 150);
+            $table->string('logoUrl', 120)->nullable();
         });
     }
 

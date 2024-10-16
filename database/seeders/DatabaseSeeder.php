@@ -14,10 +14,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             StatusAndRoleSeeder::class,
-            GameSeeder::class,
+            GameAndPlatformSeeder::class,
             UserSeeder::class,
             SkillSeeder::class,
-            PlatformSeeder::class,
             FavoriteGameSeeder::class,
         ]);
     }

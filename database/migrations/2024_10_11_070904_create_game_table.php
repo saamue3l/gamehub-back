@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('game', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('coverUrlId', 120)->nullable();
+            $table->string('name', 150);
+            $table->string('coverUrl', 120)->nullable();
         });
     }
 

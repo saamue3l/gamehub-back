@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Game extends Model
 {
+    use HasFactory;
+
 	protected $table = 'game';
 	public $timestamps = false;
 
@@ -46,7 +49,7 @@ class Game extends Model
      */
     public function platforms(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Platform::class, 'game_platform');
+        return $this->belongsToMany(Platform::class, 'game_platform', 'gameId', 'platformId');
     }
 
     public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
