@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('afternoon')->nullable()->default(false);
             $table->boolean('evening')->nullable()->default(false);
             $table->boolean('night')->nullable()->default(false);
-            $table->integer('userId')->index('userid');
+            $table->integer('userId')->index('availability_userid_index');
         });
     }
 

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('topic', function (Blueprint $table) {
             $table->integer('topicId', true);
             $table->string('title', 200);
-            $table->integer('forumId')->index('forumid');
-            $table->integer('userId')->index('userid');
-            $table->integer('topicStatusId')->index('topicstatusid');
+            $table->integer('forumId')->index('topic_forumid_index');
+            $table->integer('userId')->index('topic_userid_index');
+            $table->integer('topicStatusId')->index('topic_topicstatusid_index');
         });
     }
 

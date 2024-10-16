@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('actionhistory', function (Blueprint $table) {
             $table->integer('userId');
-            $table->integer('actionId')->index('actionid');
+            $table->integer('actionId')->index('actionhistory_actionid_index');
             $table->timestamp('actionDate')->useCurrent();
 
             $table->primary(['userId', 'actionId']);

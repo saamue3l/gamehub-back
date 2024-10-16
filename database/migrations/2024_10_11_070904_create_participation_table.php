@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('participation', function (Blueprint $table) {
             $table->integer('participationId', true);
-            $table->integer('eventId')->index('eventid');
-            $table->integer('userId')->index('userid');
+            $table->integer('eventId')->index('participation_eventid_index');
+            $table->integer('userId')->index('participation_userid_index');
         });
     }
 
