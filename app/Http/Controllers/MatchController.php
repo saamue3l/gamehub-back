@@ -57,7 +57,7 @@ class MatchController extends Controller
             ->map(function ($user) {
                 // Compter le nombre de jeux correspondants pour chaque utilisateur
                 return [
-                    'userId' => $user->userId,
+                    'userId' => $user->id,
                     'username' => $user->username,
                     'xp' => $user->xp,
                     'picture' => $user->picture,

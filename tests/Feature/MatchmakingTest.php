@@ -27,10 +27,10 @@ class MatchmakingTest extends TestCase
 
         // Exécuter les seeders pour peupler la base de données
         Artisan::call('db:seed', ['--class' => 'StatusAndRoleSeeder']); // Appeler le seeder pour les rôles et statuts
-        Artisan::call('db:seed', ['--class' => 'PlatformSeeder']); // Appeler le seeder pour les plateformes
+        Artisan::call('db:seed', ['--class' => 'GameAndPlatformSeeder']); // Appeler le seeder pour les plateformes
         Artisan::call('db:seed', ['--class' => 'SkillSeeder']); // Appeler le seeder pour les types de compétence
         Artisan::call('db:seed', ['--class' => 'UserSeeder']); // Appeler le seeder pour les utilisateurs
-        Artisan::call('db:seed', ['--class' => 'GameAndPlatformSeeder']); // Appeler le seeder pour les jeux
+        //Artisan::call('db:seed', ['--class' => 'GameAndPlatformSeeder']); // Appeler le seeder pour les jeux
 
         // Récupérer les utilisateurs et les jeux après le seeding
         $this->users = User::all(); // Récupère tous les utilisateurs
@@ -45,17 +45,17 @@ class MatchmakingTest extends TestCase
         // Utilisateurs 1 à 5 auront des jeux favoris spécifiques (1&6, 2&7, 5&8, 4&9, 5&10)
         foreach ($this->users->take(5) as $index => $user) {
             $favoriteGame = new FavoriteGame;
-            $favoriteGame->userId = $user->userId;
+            $favoriteGame->userId = $user->id;
             $favoriteGame->platformId = 1;
             $favoriteGame->skillTypeId = 1;
-            $favoriteGame->gameId = $this->games[$index]->gameId;
+            $favoriteGame->gameId = $this->games[$index]->id;
             $favoriteGame->save();
 
             $favoriteGame = new FavoriteGame;
-            $favoriteGame->userId = $user->userId;
+            $favoriteGame->userId = $user->id;
             $favoriteGame->platformId = 2;
             $favoriteGame->skillTypeId = 2;
-            $favoriteGame->gameId = $this->games[$index + 5]->gameId;
+            $favoriteGame->gameId = $this->games[$index + 5]->id;
             $favoriteGame->save();
         }
     }

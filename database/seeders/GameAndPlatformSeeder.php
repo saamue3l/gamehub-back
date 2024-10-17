@@ -51,7 +51,7 @@ class GameAndPlatformSeeder extends Seeder
     {
         $count = match (strtolower(app()->environment())) {
             'production' => config('seeding.games.production_count') ??  $csvGamesCount,
-            default => config('seeding.games.local_count') ??  max(15, $csvGamesCount),
+            default => config('seeding.games.local_count') ??  max(30, $csvGamesCount),
         };
 
         // Ensure we don't try to create more games than we have in the CSV
