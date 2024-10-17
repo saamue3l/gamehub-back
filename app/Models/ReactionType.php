@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class ReactionType
  *
- * @property int $reactionTypeId
+ * @property int $id
  * @property string $emoji
  *
  * @property Collection|Reaction[] $reactions

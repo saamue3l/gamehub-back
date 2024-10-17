@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MatchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Game;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +25,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 //Route::post('/match', [MatchController::class, 'match']);
 Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class, 'match']);
+Route::middleware('auth:sanctum')->get('/game/{game}', [MatchController::class, 'game']);
 
 

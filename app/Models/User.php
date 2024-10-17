@@ -12,39 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-/**
- * Class User
- *
- * @property int $userId
- * @property string $username
- * @property string $email
- * @property string $password
- * @property string|null $picture
- * @property int|null $xp
- * @property int $statusId
- * @property int $roleId
- *
- * @property Status $status
- * @property Role $role
- * @property Collection|AchievedSuccess[] $achievedsuccesses
- * @property Collection|ActionHistory[] $actionhistories
- * @property Collection|Availability[] $availabilities
- * @property Collection|Event[] $events
- * @property Collection|FavoriteGame[] $favoritegames
- * @property Collection|Participation[] $participations
- * @property Collection|Post[] $posts
- * @property Collection|Reaction[] $reactions
- * @property Collection|Topic[] $topics
- * @property Collection|Username[] $usernames
- *
- * @package App\Models
- */
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory;
 
 	protected $table = 'user';
-	public $timestamps = false;
+    public $timestamps = false;
 
 	protected $casts = [
 		'xp' => 'int',
@@ -74,8 +48,8 @@ class User extends Authenticatable
             'password' => 'required|string|min:8',
             'photo' => 'nullable|string',
             'xp' => 'nullable|integer|min:0',
-            'statusId' => 'required|integer|exists:status,statusId',
-            'roleId' => 'required|integer|exists:role,roleId',
+            'statusId' => 'required|integer|exists:status,id',
+            'roleId' => 'required|integer|exists:role,id',
         ];
     }
 

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class TopicStatus
  *
- * @property int $topicStatusId
+ * @property int $id
  * @property string $label
  *
  * @property Collection|Topic[] $topics

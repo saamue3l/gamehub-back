@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class PostStatus
  *
- * @property int $postStatusId
+ * @property int $id
  * @property string $label
  *
  * @property Collection|Post[] $posts

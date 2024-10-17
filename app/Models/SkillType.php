@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class SkillType
  *
- * @property int $skillTypeId
+ * @property int $id
  * @property string $label
  *
  * @property Collection|FavoriteGame[] $favoritegames

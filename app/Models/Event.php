@@ -13,16 +13,15 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Event
  *
- * @property int $eventId
+ * @property int $id
  * @property string|null $description
  * @property int $maxPlayers
  * @property Carbon $eventDate
- * @property int $userId
+ * @property int $creatorId
  * @property int $gameId
  *
- * @property User $user
+ * @property User $creatorId
  * @property Game $game
- * @property Collection|Participation[] $participations
  *
  * @package App\Models
  */
@@ -34,7 +33,7 @@ class Event extends Model
 	protected $casts = [
 		'maxPlayers' => 'int',
 		'eventDate' => 'datetime',
-		'userId' => 'int',
+		'creatorId' => 'int',
 		'gameId' => 'int'
 	];
 
@@ -42,7 +41,7 @@ class Event extends Model
 		'description',
 		'maxPlayers',
 		'eventDate',
-		'userId',
+		'creatorId',
 		'gameId'
 	];
 
@@ -52,8 +51,8 @@ class Event extends Model
             'description' => 'nullable|string',
             'maxPlayers' => 'required|integer|min:1',
             'eventDate' => 'required|date',
-            'userId' => 'required|integer|exists:user,userId',
-            'gameId' => 'required|integer|exists:game,gameId',
+            'creatorId' => 'required|integer|exists:user,id',
+            'gameId' => 'required|integer|exists:game,id',
         ];
     }
 

@@ -12,11 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Success
  *
- * @property int $successId
+ * @property int $id
  * @property string $name
  * @property string|null $description
- *
- * @property Collection|AchievedSuccess[] $achievedsuccesses
  *
  * @package App\Models
  */

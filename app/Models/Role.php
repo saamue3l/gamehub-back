@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Role
  *
- * @property int $roleId
+ * @property int $id
  * @property string $label
  *
  * @property Collection|User[] $users

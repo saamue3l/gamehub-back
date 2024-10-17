@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Game
  *
- * @property int $gameId
+ * @property int $id
  * @property string $name
  * @property string|null $cover
  *

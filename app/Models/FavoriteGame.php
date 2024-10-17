@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class FavoriteGame
  *
- * @property int $favoriteGameId
+ * @property int $id
  * @property string|null $description
  * @property int $platformId
  * @property int $skillTypeId
@@ -52,10 +52,10 @@ class FavoriteGame extends Model
     {
         return [
             'description' => 'nullable|string',
-            'platformId' => 'required|integer|exists:platform,platformId',
-            'skillTypeId' => 'required|integer|exists:skilltype,skillTypeId',
-            'gameId' => 'required|integer|exists:game,gameId',
-            'userId' => 'required|integer|exists:user,userId',
+            'platformId' => 'required|integer|exists:platform,id',
+            'skillTypeId' => 'required|integer|exists:skilltype,id',
+            'gameId' => 'required|integer|exists:game,id',
+            'userId' => 'required|integer|exists:user,id',
         ];
     }
 

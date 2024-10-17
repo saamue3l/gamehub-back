@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Username
  *
- * @property int $usernameId
+ * @property int $id
  * @property string $username
  * @property int $platformId
  * @property int $userId
@@ -41,8 +41,8 @@ class Username extends Model
     {
         return [
             'username' => 'required|string|max:50',
-            'platformId' => 'required|integer|exists:platform,platformId',
-            'userId' => 'required|integer|exists:user,userId',
+            'platformId' => 'required|integer|exists:platform,id',
+            'userId' => 'required|integer|exists:user,id',
         ];
     }
 

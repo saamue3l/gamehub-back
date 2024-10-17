@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Availability
  *
- * @property int $availabilityId
+ * @property int $id
  * @property string $dayOfWeek
  * @property bool|null $morning
  * @property bool|null $afternoon
@@ -53,7 +53,7 @@ class Availability extends Model
             'afternoon' => 'nullable|boolean',
             'evening' => 'nullable|boolean',
             'night' => 'nullable|boolean',
-            'userId' => 'required|integer|exists:user,userId',
+            'userId' => 'required|integer|exists:user,id',
         ];
     }
 

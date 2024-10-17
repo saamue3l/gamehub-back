@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Topic
  *
- * @property int $topicId
+ * @property int $id
  * @property string $title
  * @property int $forumId
- * @property int $userId
+ * @property int $creatorId
  * @property int $topicStatusId
  *
  * @property Forum $forum
@@ -32,14 +32,14 @@ class Topic extends Model
 
 	protected $casts = [
 		'forumId' => 'int',
-		'userId' => 'int',
+		'creatorId' => 'int',
 		'topicStatusId' => 'int'
 	];
 
 	protected $fillable = [
 		'title',
 		'forumId',
-		'userId',
+		'creatorId',
 		'topicStatusId'
 	];
 
@@ -47,9 +47,9 @@ class Topic extends Model
     {
         return [
             'title' => 'required|string|max:200',
-            'forumId' => 'required|integer|exists:forum,forumId',
-            'userId' => 'required|integer|exists:user,userId',
-            'topicStatusId' => 'required|integer|exists:topicstatus,topicStatusId',
+            'forumId' => 'required|integer|exists:forum,id',
+            'creatorId' => 'required|integer|exists:user,id',
+            'topicStatusId' => 'required|integer|exists:topicstatus,id',
         ];
     }
 

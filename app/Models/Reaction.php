@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Reaction
  *
- * @property int $reactionId
+ * @property int $id
  * @property int $reactionTypeId
  * @property int $userId
  * @property int $postId
@@ -42,9 +42,9 @@ class Reaction extends Model
     public static function rules(): array
     {
         return [
-            'reactionTypeId' => 'required|integer|exists:reactiontype,reactionTypeId',
-            'userId' => 'required|integer|exists:user,userId',
-            'postId' => 'required|integer|exists:post,postId',
+            'reactionTypeId' => 'required|integer|exists:reactiontype,id',
+            'userId' => 'required|integer|exists:user,id',
+            'postId' => 'required|integer|exists:post,id',
         ];
     }
 

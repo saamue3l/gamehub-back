@@ -12,11 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Action
  *
- * @property int $actionId
+ * @property int $id
  * @property int $xpEarned
  * @property string $actionType
- *
- * @property Collection|ActionHistory[] $actionhistories
  *
  * @package App\Models
  */

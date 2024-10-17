@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Post
  *
- * @property int $postId
+ * @property int $id
  * @property string $content
  * @property Carbon|null $creationDate
  * @property int $userId
@@ -52,9 +52,9 @@ class Post extends Model
         return [
             'content' => 'required|string',
             'creationDate' => 'nullable|date',
-            'userId' => 'required|integer|exists:user,userId',
-            'topicId' => 'required|integer|exists:topic,topicId',
-            'postStatusId' => 'required|integer|exists:poststatus,postStatusId',
+            'userId' => 'required|integer|exists:user,id',
+            'topicId' => 'required|integer|exists:topic,id',
+            'postStatusId' => 'required|integer|exists:poststatus,id',
         ];
     }
 

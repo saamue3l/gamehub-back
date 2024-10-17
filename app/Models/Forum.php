@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Forum
  *
- * @property int $forumId
+ * @property int $id
  * @property string $name
  *
  * @property Collection|Topic[] $topics
