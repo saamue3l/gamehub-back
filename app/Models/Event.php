@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,14 +20,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $eventDate
  * @property int $creatorId
  * @property int $gameId
- *
- * @property User $creatorId
  * @property Game $game
  *
  * @package App\Models
  */
 class Event extends Model
 {
+    use HasFactory;
+
 	protected $table = 'event';
 	public $timestamps = false;
 
