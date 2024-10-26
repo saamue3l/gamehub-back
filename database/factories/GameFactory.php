@@ -51,47 +51,47 @@ class GameFactory extends Factory
         ];
     }
 
-    /**
-     * Configure the model factory.
-     *
-     * @return $this
-     */
-    public function configure(): static
-    {
-        return $this->afterCreating(function (Game $game) {
-            $this->attachPlatforms($game);
-        });
-    }
-
-    /**
-     * Attach platforms to the game
-     */
-    protected function attachPlatforms(Game $game): void
-    {
-        $csvGame = $this->games[$game->id -1]; // We use id as $currentGameIndex is still at 0
-        foreach ($csvGame->platforms as $platformData) {
-            try {
-                if (empty($platformData->name) || empty($platformData->imageUrl)) {
-                    \Log::warning("Skipping platform with empty name for game {$game->name}");
-                    continue;
-                }
-
-                $platform = Platform::firstOrCreate(
-                    ['name' => $platformData->name],
-                    ['logoUrl' => $platformData->imageUrl]
-                );
-
-                if ($platform->id) {
-                    $game->platforms()->attach($platform->id);
-                }
-            } catch (\Exception $e) {
-                \Log::error("Error attaching platform to game {$game->name}: " . $e->getMessage(), [
-                    'platform' => $platformData,
-                    'game' => $game->toArray()
-                ]);
-            }
-        }
-    }
+//    /**
+//     * Configure the model factory.
+//     *
+//     * @return $this
+//     */
+//    public function configure(): static
+//    {
+//        return $this->afterCreating(function (Game $game) {
+//            $this->attachPlatforms($game);
+//        });
+//    }
+//
+//    /**
+//     * Attach platforms to the game
+//     */
+//    protected function attachPlatforms(Game $game): void
+//    {
+//        $csvGame = $this->games[$game->id -1]; // We use id as $currentGameIndex is still at 0
+//        foreach ($csvGame->platforms as $platformData) {
+//            try {
+//                if (empty($platformData->name) || empty($platformData->imageUrl)) {
+//                    \Log::warning("Skipping platform with empty name for game {$game->name}");
+//                    continue;
+//                }
+//
+//                $platform = Platform::firstOrCreate(
+//                    ['name' => $platformData->name],
+//                    ['logoUrl' => $platformData->imageUrl]
+//                );
+//
+//                if ($platform->id) {
+//                    $game->platforms()->attach($platform->id);
+//                }
+//            } catch (\Exception $e) {
+//                \Log::error("Error attaching platform to game {$game->name}: " . $e->getMessage(), [
+//                    'platform' => $platformData,
+//                    'game' => $game->toArray()
+//                ]);
+//            }
+//        }
+//    }
 
     public function gamesCount(): int
     {

@@ -29,24 +29,16 @@ class Platform extends Model
 	public $timestamps = false;
 
 	protected $fillable = [
-		'name'
+		'name',
+        'logoUrl'
 	];
 
     public static function rules(): array
     {
         return [
             'name' => 'required|string|max:100',
+            'logoUrl' => 'string'
         ];
-    }
-
-    /**
-     * Games that support this platform
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function games(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany(Game::class, 'game_platform', 'platformId', 'gameId');
     }
 
 	public function usernames()

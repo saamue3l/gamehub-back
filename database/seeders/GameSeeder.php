@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class GameAndPlatformSeeder extends Seeder
+class GameSeeder extends Seeder
 {
     protected GamesCsvReader $reader;
 
