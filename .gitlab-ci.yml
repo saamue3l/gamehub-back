@@ -8,7 +8,7 @@ cache:
 unit-test-job:
   stage: test
   tags:
-    - ue19
+    - gamehub
   services:
     - docker:26.0.0-dind
   before_script:
