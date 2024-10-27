@@ -5,13 +5,10 @@ cache:
     - node_modules/
     - vendor/
 
-include:
-  - project: 'lessons/info/salto/ci'
-    ref: main
-    file: 'laravel.yml'
-
 unit-test-job:
   stage: test
+  tags:
+    - gamehub
   services:
     - docker:26.0.0-dind
   before_script:
