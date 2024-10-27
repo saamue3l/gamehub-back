@@ -27,7 +27,8 @@ class MatchmakingTest extends TestCase
 
         // Exécuter les seeders pour peupler la base de données
         Artisan::call('db:seed', ['--class' => 'StatusAndRoleSeeder']); // Appeler le seeder pour les rôles et statuts
-        Artisan::call('db:seed', ['--class' => 'GameAndPlatformSeeder']); // Appeler le seeder pour les plateformes
+        Artisan::call('db:seed', ['--class' => 'GameSeeder']); // Appeler le seeder pour les jeux
+        Artisan::call('db:seed', ['--class' => 'PlatformSeeder']); // Appeler le seeder pour les plateformes
         Artisan::call('db:seed', ['--class' => 'SkillSeeder']); // Appeler le seeder pour les types de compétence
         Artisan::call('db:seed', ['--class' => 'UserSeeder']); // Appeler le seeder pour les utilisateurs
         //Artisan::call('db:seed', ['--class' => 'GameAndPlatformSeeder']); // Appeler le seeder pour les jeux
