@@ -22,7 +22,7 @@ services:
     healthcheck:
       test: ["CMD", 'mysqladmin', 'ping', '-h', 'db', '-u', '${DB_USERNAME}', '-p${DB_PASSWORD}' ]
       interval: 2s
-      timeout: 20s
+      timeout: 50s
       retries: 10
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
