@@ -16,7 +16,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->foreignIdFor(\App\Models\User::class, "userId");
             $table->foreignIdFor(\App\Models\Game::class, "gameId");
-            $table->foreignIdFor(\App\Models\Platform::class, "platformId");
             $table->foreignIdFor(\App\Models\SkillType::class, "skillTypeId");
         });
     }

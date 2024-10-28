@@ -34,7 +34,6 @@ class FavoriteGame extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'platformId' => 'int',
 		'skillTypeId' => 'int',
 		'gameId' => 'int',
 		'userId' => 'int'
@@ -42,7 +41,6 @@ class FavoriteGame extends Model
 
 	protected $fillable = [
 		'description',
-		'platformId',
 		'skillTypeId',
 		'gameId',
 		'userId'
@@ -52,18 +50,11 @@ class FavoriteGame extends Model
     {
         return [
             'description' => 'nullable|string',
-            'platformId' => 'required|integer|exists:platform,id',
             'skillTypeId' => 'required|integer|exists:skilltype,id',
             'gameId' => 'required|integer|exists:game,id',
             'userId' => 'required|integer|exists:user,id',
         ];
     }
-
-
-    public function platform()
-	{
-		return $this->belongsTo(Platform::class, 'platformId');
-	}
 
 	public function skilltype()
 	{

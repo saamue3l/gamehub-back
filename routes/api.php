@@ -26,6 +26,9 @@ Route::post('logout', [AuthController::class, 'logout']);
 //Route::post('/match', [MatchController::class, 'match']);
 Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class, 'match']);
 
+/* === GAMES === */
+Route::post('/game/searchGames', [\App\Http\Controllers\GameController::class, 'searchGame'])->name("searchGames");
+
 /* === EVENTS === */
 Route::get('/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEvents");
 

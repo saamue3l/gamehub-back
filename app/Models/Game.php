@@ -9,6 +9,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  * Class Game
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
 class Game extends Model
 {
     use HasFactory;
+    use Searchable;
 
 	protected $table = 'game';
 	public $timestamps = false;
@@ -39,6 +41,14 @@ class Game extends Model
         return [
             'name' => 'required|string|max:100',
             'cover' => 'nullable|string',
+        ];
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (int) $this->id,
+            'name' => $this->name,
         ];
     }
 

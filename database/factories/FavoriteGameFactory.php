@@ -17,7 +17,6 @@ class FavoriteGameFactory extends Factory
     {
         return [
             'description' => $this->faker->sentence(),  // Génère une description aléatoire
-            'platformId' => Platform::inRandomOrder()->first()->id,  // Récupère un platformId aléatoire
             'skillTypeId' => SkillType::inRandomOrder()->first()->id,  // Récupère un skillTypeId aléatoire
             'gameId' => Game::inRandomOrder()->first()->id,  // Récupère un gameId aléatoire
             'userId' => User::inRandomOrder()->first()->id,  // Récupère un userId aléatoire
