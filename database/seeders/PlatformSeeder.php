@@ -13,11 +13,16 @@ class PlatformSeeder extends Seeder
      */
     public function run(): void
     {
-        // Insérer les trois compétences de base
         Platform::insert([
-            ['name' => 'PC', 'logoUrl' => '/tamher.jpg'],
-            ['name' => 'Playstation', 'logoUrl' => '/tamher.jpg'],
-            ['name' => 'Nintendo Switch', 'logoUrl' => '/tamher.jpg'],
+            ['name' => 'battlenet', 'logoUrl' => '/battlenetIcon.png'],
+            ['name' => 'discord', 'logoUrl' => '/discordIcon.png'],
+            ['name' => 'ea', 'logoUrl' => '/eaIcon.png'],
+            ['name' => 'playstation', 'logoUrl' => '/playstationIcon.png'],
+            ['name' => 'riot', 'logoUrl' => '/riotIcon.png'],
+            ['name' => 'steam', 'logoUrl' => '/steamIcon.png'],
+            ['name' => 'switch', 'logoUrl' => '/switchIcon.png'],
+            ['name' => 'ubisoft', 'logoUrl' => '/ubisoftIcon.png'],
+            ['name' => 'xbox', 'logoUrl' => '/xboxIcon.png'],
         ]);
     }
 }

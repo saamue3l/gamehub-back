@@ -10,11 +10,10 @@ class SkillSeeder extends Seeder
 {
     public function run()
     {
-        // Insérer les trois compétences de base
         SkillType::insert([
-            ['id' => 1, 'label' => 'Beginner'],
-            ['id' => 2, 'label' => 'Intermediate'],
-            ['id' => 3, 'label' => 'Advanced'],
+            ['id' => 1, 'label' => 'Débutant'],
+            ['id' => 2, 'label' => 'Intermédiaire'],
+            ['id' => 3, 'label' => 'Avancé'],
         ]);
     }
 }
