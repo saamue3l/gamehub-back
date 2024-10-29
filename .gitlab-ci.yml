@@ -38,8 +38,10 @@ send-discord-job:
   variables:
     WEBHOOK_URL: "https://discord.com/api/webhooks/1300752395474698251/SvyhjBU4wYIDlfx2M-dBv0HGh7KVSUWy9SIrjX0Z5Oxk2q8z-Ol73rtBVUVDsYRSS4Em"
   script:
+    - export
     - apk add --no-cache curl
-    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"Tests have failed : $CI_PAGES_URL\"}" $WEBHOOK_URL'
+    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"Tests have failed on branch $CI_COMMIT_REF_NAME : $CI_PIPELINE_URL\"}" $WEBHOOK_URL'
+    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"$GITLAB_USER_NAME on branch $CI_COMMIT_REF_NAME : $CI_PIPELINE_URL\"}" https://discord.com/api/webhooks/1300756703608049714/iZJi0Q__SRkWpO_eRCDUqWReJprGefMhWYuD0gAHTDOcX_Dlm0MJXPRVW6CpgXqDD3sd'
   when: on_failure
 
 
