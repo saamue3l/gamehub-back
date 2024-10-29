@@ -36,10 +36,10 @@ unit-test-job:
 send-discord-job:
   stage: post-test
   variables:
-    WEBHOOK_URL: "https://discord.com/api/webhooks/1237687007803740180/xgvbdmA-yeHvHRmrlGxS-UQJHbIxEmHQL2k5jmCj6i1l_QJJUhyd0Ow1vSHAHoAPFy3y"
+    WEBHOOK_URL: "https://discord.com/api/webhooks/1300752395474698251/SvyhjBU4wYIDlfx2M-dBv0HGh7KVSUWy9SIrjX0Z5Oxk2q8z-Ol73rtBVUVDsYRSS4Em"
   script:
     - apk add --no-cache curl
-    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"Tests have failed\"}" $WEBHOOK_URL'
+    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"Tests have failed : $CI_PAGES_URL\"}" $WEBHOOK_URL'
   when: on_failure
 
 
