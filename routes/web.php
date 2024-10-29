@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +19,4 @@ Route::get('/', function () {
 });
 
 //route de test, avec le front ça seras fait via api.php et avec une requete POST
-Route::get('/test-login', [AuthController::class, 'login']);
+Route::get('/test-login', [LoginController::class, 'login']);
