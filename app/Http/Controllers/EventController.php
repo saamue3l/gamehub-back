@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
     public function getAllEvents(Request $request) {
-        return response()->json(Event::all());
+        return response()->json(Event::with("game")->with('participants')->with('creator')->get());
     }
 }
