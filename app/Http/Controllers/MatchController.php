@@ -14,7 +14,6 @@ class MatchController extends Controller
         // Valider que le tableau des jeux est bien présent et correctement formaté
         $validated = $request->validate([
             '*.gameId' => 'required|integer',
-            '*.platformId' => 'required|integer',
             '*.skillTypeId' => 'required|integer',
         ]);
 
@@ -36,7 +35,6 @@ class MatchController extends Controller
                 foreach ($requestedGames as $game) {
                     $q->orWhere(function ($subQuery) use ($game) {
                         $subQuery->where('gameId', $game['gameId'])
-                            ->where('platformId', $game['platformId'])
                             ->where('skillTypeId', $game['skillTypeId']);
                     });
                 }
@@ -47,7 +45,6 @@ class MatchController extends Controller
                     foreach ($requestedGames as $game) {
                         $q->orWhere(function ($subQuery) use ($game) {
                             $subQuery->where('gameId', $game['gameId'])
-                                ->where('platformId', $game['platformId'])
                                 ->where('skillTypeId', $game['skillTypeId']);
                         });
                     }

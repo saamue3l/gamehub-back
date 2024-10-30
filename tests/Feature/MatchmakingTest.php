@@ -2,22 +2,18 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 use App\Models\FavoriteGame;
 use App\Models\Game;
-use App\Models\Role;
-use App\Models\Status;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
-use Mockery;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 
 class MatchmakingTest extends TestCase
 {
-
-    use RefreshDatabase;
+    use DatabaseMigrations;
     protected $users;
     protected $games;
 
@@ -28,18 +24,17 @@ class MatchmakingTest extends TestCase
         // Exécuter les seeders pour peupler la base de données
         Artisan::call('db:seed', ['--class' => 'StatusAndRoleSeeder']); // Appeler le seeder pour les rôles et statuts
         Artisan::call('db:seed', ['--class' => 'GameSeeder']); // Appeler le seeder pour les jeux
-        Artisan::call('db:seed', ['--class' => 'PlatformSeeder']); // Appeler le seeder pour les plateformes
         Artisan::call('db:seed', ['--class' => 'SkillSeeder']); // Appeler le seeder pour les types de compétence
         Artisan::call('db:seed', ['--class' => 'UserSeeder']); // Appeler le seeder pour les utilisateurs
-        //Artisan::call('db:seed', ['--class' => 'GameAndPlatformSeeder']); // Appeler le seeder pour les jeux
 
         // Récupérer les utilisateurs et les jeux après le seeding
-        $this->users = User::all(); // Récupère tous les utilisateurs
-        $this->games = Game::all(); // Récupère tous les jeux
-
+        $this->users = User::take(5)->get(); // Récupère tous les utilisateurs
+        $this->games = Game::take(10)->get(); // Récupère tous les jeux
+        echo($this->users);
         // Associer des jeux favoris à des utilisateurs de manière prédictible
         $this->assignFavoriteGames();
     }
+
 
     protected function assignFavoriteGames(): void
     {
@@ -47,14 +42,12 @@ class MatchmakingTest extends TestCase
         foreach ($this->users->take(5) as $index => $user) {
             $favoriteGame = new FavoriteGame;
             $favoriteGame->userId = $user->id;
-            $favoriteGame->platformId = 1;
             $favoriteGame->skillTypeId = 1;
             $favoriteGame->gameId = $this->games[$index]->id;
             $favoriteGame->save();
 
             $favoriteGame = new FavoriteGame;
             $favoriteGame->userId = $user->id;
-            $favoriteGame->platformId = 2;
             $favoriteGame->skillTypeId = 2;
             $favoriteGame->gameId = $this->games[$index + 5]->id;
             $favoriteGame->save();
@@ -67,7 +60,7 @@ class MatchmakingTest extends TestCase
         // On envoie la requête sans authentifier l'utilisateur
         $response = $this->postJson('/api/matchmaking', [
             'requestedGames' => [
-                ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
+                ['gameId' => 1, 'skillTypeId' => 1],
             ],
         ]);
 
@@ -84,8 +77,8 @@ class MatchmakingTest extends TestCase
 
         // Préparer les données de la requête
         $requestedGames = [
-            ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
-            ['gameId' => 2, 'platformId' => 2, 'skillTypeId' => 2],
+            ['gameId' => 1, 'skillTypeId' => 1],
+            ['gameId' => 2, 'skillTypeId' => 2],
         ];
 
         // Envoyer une requête POST à l'API
@@ -105,6 +98,9 @@ class MatchmakingTest extends TestCase
     /** @test */
     public function it_can_retrieve_specific_users()
     {
+        Artisan::call('db:seed', ['--class' => 'GameSeeder']); // Appeler le seeder pour les jeux
+        Artisan::call('db:seed', ['--class' => 'UserSeeder']); // Appeler le seeder pour les utilisateurs
+
         // Créer un utilisateur et associer des jeux favoris
         $user = User::factory()->create();
 
@@ -113,10 +109,10 @@ class MatchmakingTest extends TestCase
 
         // Préparer les données de la requête
         $requestedGames = [
-            ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
-            ['gameId' => 6, 'platformId' => 2, 'skillTypeId' => 2],
-            ['gameId' => 2, 'platformId' => 1, 'skillTypeId' => 1],
-            ['gameId' => 8, 'platformId' => 2, 'skillTypeId' => 2],
+            ['gameId' => 1, 'skillTypeId' => 1], //user 1
+            ['gameId' => 6, 'skillTypeId' => 2], //user 1
+            ['gameId' => 2, 'skillTypeId' => 1], //user 2
+            ['gameId' => 8, 'skillTypeId' => 2], //user 3
         ];
 
         // Simuler la réponse
@@ -178,7 +174,6 @@ class MatchmakingTest extends TestCase
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors([
-            '0.platformId',  // Correspond à l'index '0' pour platformId
             '0.skillTypeId', // Correspond à l'index '0' pour skillTypeId
         ]);
     }
@@ -191,7 +186,7 @@ class MatchmakingTest extends TestCase
         Sanctum::actingAs($this->user);
 
         $requestedGames = [
-            ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
+            ['gameId' => 1, 'skillTypeId' => 1],
             ['gameId' => 2],
         ];
 
@@ -202,7 +197,6 @@ class MatchmakingTest extends TestCase
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors([
-            '1.platformId',  // Correspond à l'index '1' pour platformId
             '1.skillTypeId', // Correspond à l'index '1' pour skillTypeId
         ]);
     }
@@ -247,7 +241,6 @@ class MatchmakingTest extends TestCase
 
         $response->assertJsonValidationErrors([
             '0.gameId',     // Correspond à l'index '0' pour gameId
-            '0.platformId',  // Correspond à l'index '0' pour platformId
             '0.skillTypeId', // Correspond à l'index '0' pour skillTypeId
         ]);
     }
