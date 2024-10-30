@@ -30,6 +30,6 @@ Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class,
 Route::post('/game/searchGames', [\App\Http\Controllers\GameController::class, 'searchGame'])->name("searchGames");
 
 /* === EVENTS === */
-Route::get('/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEvents");
+Route::match(['GET', 'POST'], '/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEventsWFilters");
 
 
