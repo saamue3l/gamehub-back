@@ -33,14 +33,7 @@ class GameSeeder extends Seeder
             $factory->count($count)->create();
 
         } catch (\Exception $e) {
-            Log::error('Error during game seeding: ' . $e->getMessage(), [
-                'exception' => $e,
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            if (app()->environment('local', 'development')) {
-                throw $e; // Re throw in development for better debugging
-            }
+            throw $e;
         }
     }
 
