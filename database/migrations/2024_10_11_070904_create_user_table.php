@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('picture')->nullable();
             $table->integer('xp')->default(0);
 
-            $table->foreignIdFor(\App\Models\Status::class, "statusId");
-            $table->foreignIdFor(\App\Models\Role::class, "roleId");
+            $table->foreignIdFor(\App\Models\Status::class, "statusId")->default(1);
+            $table->foreignIdFor(\App\Models\Role::class, "roleId")->default(2);
         });
     }
 

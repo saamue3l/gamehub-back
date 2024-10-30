@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MatchController;
-use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Game;
@@ -32,6 +31,7 @@ Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class,
 Route::post('/game/searchGames', [\App\Http\Controllers\GameController::class, 'searchGame'])->name("searchGames");
 
 /* === EVENTS === */
-Route::get('/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEvents");
+Route::match(['GET', 'POST'], '/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEventsWFilters");
+Route::middleware('auth:sanctum')->post('/event/createEvent', [\App\Http\Controllers\EventController::class, 'createEvent'])->name("createEvent");
 
 
