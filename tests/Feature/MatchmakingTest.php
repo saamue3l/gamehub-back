@@ -30,7 +30,6 @@ class MatchmakingTest extends TestCase
         // Récupérer les utilisateurs et les jeux après le seeding
         $this->users = User::take(5)->get(); // Récupère tous les utilisateurs
         $this->games = Game::take(10)->get(); // Récupère tous les jeux
-        echo($this->users);
         // Associer des jeux favoris à des utilisateurs de manière prédictible
         $this->assignFavoriteGames();
     }
@@ -122,8 +121,8 @@ class MatchmakingTest extends TestCase
         $response->assertStatus(200);
 
         // Afficher la réponse JSON pour déboguer si besoin
-        $responseData = json_decode($response->getContent(), true); // Décode le JSON en tableau associatif
-        echo json_encode($responseData, JSON_PRETTY_PRINT); // Réencode avec formatage
+        //$responseData = json_decode($response->getContent(), true); // Décode le JSON en tableau associatif
+        //echo json_encode($responseData, JSON_PRETTY_PRINT); // Réencode avec formatage
 
         // Vérifier la structure JSON
         $response->assertJsonStructure([
