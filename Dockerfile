@@ -13,7 +13,7 @@ RUN --mount=type=bind,source=composer.json,target=composer.json \
 
 ################################################################################
 
-FROM php:8.1 as final
+FROM php:8.2 as final
 
 WORKDIR /
 ARG APP_ENV_FILE=.env.prod
