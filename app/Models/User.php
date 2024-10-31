@@ -46,6 +46,7 @@ class User extends Authenticatable
             'username' => 'required|string|max:50|unique:user,username',
             'email' => 'required|string|email|max:100|unique:user,email',
             'password' => 'required|string|min:8',
+            'passwordConfirm' => 'required|string|same:password',
             'photo' => 'nullable|string',
             'xp' => 'nullable|integer|min:0',
             'statusId' => 'required|integer|exists:status,id',
