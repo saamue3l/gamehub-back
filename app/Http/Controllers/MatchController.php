@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Game;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class MatchController extends Controller
 {
     public function match(Request $request)
     {
+        //\Log::info('Authorization Header', ['header' => $request->header('Authorization')]);
         // Valider que le tableau des jeux est bien présent et correctement formaté
         $validated = $request->validate([
             '*.gameId' => 'required|integer',
-            '*.platformId' => 'required|integer',
             '*.skillTypeId' => 'required|integer',
         ]);
 
@@ -26,36 +24,21 @@ class MatchController extends Controller
             ], 422);
         }
 
-        // Récupérer les jeux demandés
-        $requestedGames = $validated;
+        // Extraire les jeux demandés
+        $requestedGames = collect($validated);
 
-        // Récupérer les utilisateurs avec le compte des jeux correspondants
+        // Récupérer les utilisateurs avec les jeux correspondants
         $users = User::where('statusId', 1) // Filtrer les utilisateurs actifs (non bannis)
         ->whereHas('favoriteGames', function($query) use ($requestedGames) {
-            $query->where(function ($q) use ($requestedGames) {
-                foreach ($requestedGames as $game) {
-                    $q->orWhere(function ($subQuery) use ($game) {
-                        $subQuery->where('gameId', $game['gameId'])
-                            ->where('platformId', $game['platformId'])
-                            ->where('skillTypeId', $game['skillTypeId']);
-                    });
-                }
-            });
+            $query->whereIn('gameId', $requestedGames->pluck('gameId'))
+                ->whereIn('skillTypeId', $requestedGames->pluck('skillTypeId'));
         })
             ->with(['favoriteGames' => function($query) use ($requestedGames) {
-                $query->where(function ($q) use ($requestedGames) {
-                    foreach ($requestedGames as $game) {
-                        $q->orWhere(function ($subQuery) use ($game) {
-                            $subQuery->where('gameId', $game['gameId'])
-                                ->where('platformId', $game['platformId'])
-                                ->where('skillTypeId', $game['skillTypeId']);
-                        });
-                    }
-                });
+                $query->whereIn('gameId', $requestedGames->pluck('gameId'))
+                    ->whereIn('skillTypeId', $requestedGames->pluck('skillTypeId'));
             }])
-            ->get()
-            ->map(function ($user) {
-                // Compter le nombre de jeux correspondants pour chaque utilisateur
+            ->get(['id', 'username', 'xp', 'picture']) // Charger uniquement les champs nécessaires
+            ->map(function ($user) use ($requestedGames) {
                 return [
                     'userId' => $user->id,
                     'username' => $user->username,
