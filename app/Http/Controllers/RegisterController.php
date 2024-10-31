@@ -33,8 +33,9 @@ class RegisterController extends Controller
             'roleId' => 2,
         ]);
 
+
         return response()->json([
-            'message' => 'User registered successfully!',
+            'message' => 'Inscription réussie',
             'user' => $user,
         ], 201);
     }
