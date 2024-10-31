@@ -69,6 +69,23 @@ class Event extends Model
         return $this->belongsToMany(User::class, 'participation', 'eventId', 'userId');
     }
 
+    /**
+     * Add a participan to the event
+     * @param User $user
+     * @return void
+     * @throws \Exception
+     */
+    public function addParticipant(User $user)
+    {
+        // Check if the maximum participant limit is reached
+        if ($this->participants()->count() >= $this->maxPlayers) {
+            throw new \Exception("Cet évènement a atteint le nombre maximum de participants");
+        }
+
+        // Attach the user to the event's participants if limit is not reached
+        $this->participants()->attach($user->id);
+    }
+
 	public function game(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
 		return $this->belongsTo(Game::class, 'gameId');

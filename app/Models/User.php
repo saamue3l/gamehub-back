@@ -88,8 +88,8 @@ class User extends Authenticatable
 		return $this->hasMany(FavoriteGame::class, 'userId');
 	}
 
-	public function participations()
-	{
+	public function participations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Event::class, 'participation', 'userId', 'eventId');
     }
 
