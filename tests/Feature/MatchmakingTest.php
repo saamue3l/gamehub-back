@@ -2,24 +2,21 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 use App\Models\FavoriteGame;
 use App\Models\Game;
-use App\Models\Role;
-use App\Models\Status;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
-use Mockery;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 
 class MatchmakingTest extends TestCase
 {
+    use DatabaseMigrations;
 
-    use RefreshDatabase;
-    protected $users;
-    protected $games;
+    private $user;
+    private $token;
 
     protected function setUp(): void
     {
@@ -28,35 +25,28 @@ class MatchmakingTest extends TestCase
         // Exécuter les seeders pour peupler la base de données
         Artisan::call('db:seed', ['--class' => 'StatusAndRoleSeeder']); // Appeler le seeder pour les rôles et statuts
         Artisan::call('db:seed', ['--class' => 'GameSeeder']); // Appeler le seeder pour les jeux
-        Artisan::call('db:seed', ['--class' => 'PlatformSeeder']); // Appeler le seeder pour les plateformes
         Artisan::call('db:seed', ['--class' => 'SkillSeeder']); // Appeler le seeder pour les types de compétence
         Artisan::call('db:seed', ['--class' => 'UserSeeder']); // Appeler le seeder pour les utilisateurs
-        //Artisan::call('db:seed', ['--class' => 'GameAndPlatformSeeder']); // Appeler le seeder pour les jeux
-
-        // Récupérer les utilisateurs et les jeux après le seeding
-        $this->users = User::all(); // Récupère tous les utilisateurs
-        $this->games = Game::all(); // Récupère tous les jeux
 
         // Associer des jeux favoris à des utilisateurs de manière prédictible
         $this->assignFavoriteGames();
     }
 
+
     protected function assignFavoriteGames(): void
     {
         // Utilisateurs 1 à 5 auront des jeux favoris spécifiques (1&6, 2&7, 5&8, 4&9, 5&10)
-        foreach ($this->users->take(5) as $index => $user) {
+        foreach (User::take(5)->get() as $user) {
             $favoriteGame = new FavoriteGame;
             $favoriteGame->userId = $user->id;
-            $favoriteGame->platformId = 1;
             $favoriteGame->skillTypeId = 1;
-            $favoriteGame->gameId = $this->games[$index]->id;
+            $favoriteGame->gameId = $user->id;
             $favoriteGame->save();
 
             $favoriteGame = new FavoriteGame;
             $favoriteGame->userId = $user->id;
-            $favoriteGame->platformId = 2;
             $favoriteGame->skillTypeId = 2;
-            $favoriteGame->gameId = $this->games[$index + 5]->id;
+            $favoriteGame->gameId = $user->id+5;
             $favoriteGame->save();
         }
     }
@@ -67,7 +57,7 @@ class MatchmakingTest extends TestCase
         // On envoie la requête sans authentifier l'utilisateur
         $response = $this->postJson('/api/matchmaking', [
             'requestedGames' => [
-                ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
+                ['gameId' => 1, 'skillTypeId' => 1],
             ],
         ]);
 
@@ -79,17 +69,23 @@ class MatchmakingTest extends TestCase
     public function it_can_return_specific_json_structure()
     {
         // Utiliser le premier utilisateur par défaut
-        $this->user = User::first();
-        Sanctum::actingAs($this->user);
+        $user = User::first();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $token = $user->createToken('TestToken')->plainTextToken;
 
         // Préparer les données de la requête
         $requestedGames = [
-            ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
-            ['gameId' => 2, 'platformId' => 2, 'skillTypeId' => 2],
+            ['gameId' => 1, 'skillTypeId' => 1],
+            ['gameId' => 2, 'skillTypeId' => 2],
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/matchmaking', $requestedGames);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier le statut de la réponse
         $response->assertStatus(200);
@@ -105,29 +101,36 @@ class MatchmakingTest extends TestCase
     /** @test */
     public function it_can_retrieve_specific_users()
     {
-        // Créer un utilisateur et associer des jeux favoris
-        $user = User::factory()->create();
+        //Artisan::call('db:seed', ['--class' => 'GameSeeder']); // Appeler le seeder pour les jeux
+        //Artisan::call('db:seed', ['--class' => 'UserSeeder']); // Appeler le seeder pour les utilisateurs
 
-        // Utiliser Sanctum pour authentifier l'utilisateur
-        Sanctum::actingAs($user);
+        // Utiliser le premier utilisateur par défaut
+        $user = User::first();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $token = $user->createToken('TestToken')->plainTextToken;
 
         // Préparer les données de la requête
         $requestedGames = [
-            ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
-            ['gameId' => 6, 'platformId' => 2, 'skillTypeId' => 2],
-            ['gameId' => 2, 'platformId' => 1, 'skillTypeId' => 1],
-            ['gameId' => 8, 'platformId' => 2, 'skillTypeId' => 2],
+            ['gameId' => 1, 'skillTypeId' => 1], //user 1
+            ['gameId' => 6, 'skillTypeId' => 2], //user 1
+            ['gameId' => 2, 'skillTypeId' => 1], //user 2
+            ['gameId' => 8, 'skillTypeId' => 2], //user 3
         ];
 
         // Simuler la réponse
-        $response = $this->postJson('/api/matchmaking', $requestedGames);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier le statut de la réponse
         $response->assertStatus(200);
 
         // Afficher la réponse JSON pour déboguer si besoin
-        $responseData = json_decode($response->getContent(), true); // Décode le JSON en tableau associatif
-        echo json_encode($responseData, JSON_PRETTY_PRINT); // Réencode avec formatage
+        //$responseData = json_decode($response->getContent(), true); // Décode le JSON en tableau associatif
+        //echo json_encode($responseData, JSON_PRETTY_PRINT); // Réencode avec formatage
 
         // Vérifier la structure JSON
         $response->assertJsonStructure([
@@ -164,21 +167,27 @@ class MatchmakingTest extends TestCase
     public function it_fails_when_required_data_is_empty()
     {
         // Utiliser le premier utilisateur par défaut
-        $this->user = User::first();
-        Sanctum::actingAs($this->user);
+        $user = User::first();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+
+        $token = $user->createToken('TestToken')->plainTextToken;
 
         $requestedGames = [
             ['gameId' => 1],
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/matchmaking', $requestedGames);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors([
-            '0.platformId',  // Correspond à l'index '0' pour platformId
             '0.skillTypeId', // Correspond à l'index '0' pour skillTypeId
         ]);
     }
@@ -187,22 +196,27 @@ class MatchmakingTest extends TestCase
     public function it_fails_when_required_data_is_empty_on_several_games()
     {
         // Utiliser le premier utilisateur par défaut
-        $this->user = User::first();
-        Sanctum::actingAs($this->user);
+        $user = User::first();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $token = $user->createToken('TestToken')->plainTextToken;
 
         $requestedGames = [
-            ['gameId' => 1, 'platformId' => 1, 'skillTypeId' => 1],
+            ['gameId' => 1, 'skillTypeId' => 1],
             ['gameId' => 2],
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/matchmaking', $requestedGames);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors([
-            '1.platformId',  // Correspond à l'index '1' pour platformId
             '1.skillTypeId', // Correspond à l'index '1' pour skillTypeId
         ]);
     }
@@ -211,13 +225,19 @@ class MatchmakingTest extends TestCase
     public function it_fails_when_no_array()
     {
         // Utiliser le premier utilisateur par défaut
-        $this->user = User::first();
-        Sanctum::actingAs($this->user);
+        $user = User::first();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $token = $user->createToken('TestToken')->plainTextToken;
 
         $requestedGames = [];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/matchmaking', $requestedGames);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);
@@ -232,22 +252,27 @@ class MatchmakingTest extends TestCase
     public function it_fails_when_required_data_is_missing()
     {
         // Utiliser le premier utilisateur par défaut
-        $this->user = User::first();
-        Sanctum::actingAs($this->user);
+        $user = User::first();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $token = $user->createToken('TestToken')->plainTextToken;
 
         $requestedGames = [
             [],
         ];
 
         // Envoyer une requête POST à l'API
-        $response = $this->postJson('/api/matchmaking', $requestedGames);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/matchmaking', $requestedGames);
 
         // Vérifier que la réponse retourne une erreur de validation (status 422)
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors([
             '0.gameId',     // Correspond à l'index '0' pour gameId
-            '0.platformId',  // Correspond à l'index '0' pour platformId
             '0.skillTypeId', // Correspond à l'index '0' pour skillTypeId
         ]);
     }

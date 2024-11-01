@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\RegisterController;
@@ -28,11 +29,13 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class, 'match']);
 
 /* === GAMES === */
-Route::post('/game/searchGames', [\App\Http\Controllers\GameController::class, 'searchGame'])->name("searchGames");
 Route::middleware('auth:sanctum')->post('/game/searchGamesWithoutFavorites', [\App\Http\Controllers\GameController::class, 'searchGamesWithoutFavorites'])->name("searchGamesWithoutFavorites");
+Route::middleware('auth:sanctum')->post('/game/searchGames', [\App\Http\Controllers\GameController::class, 'searchGame'])->name("searchGames");
 
 /* === EVENTS === */
-Route::get('/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEvents");
+Route::middleware('auth:sanctum')->match(['GET', 'POST'], '/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEventsWFilters");
+Route::middleware('auth:sanctum')->post('/event/createEvent', [\App\Http\Controllers\EventController::class, 'createEvent'])->name("createEvent");
+Route::middleware('auth:sanctum')->post('/event/changeJoinedStatus/{event}', [\App\Http\Controllers\EventController::class, 'changeJoinedStatus'])->name("changeJoinedStatus");
 
 /* === PROFILE === */
 Route::middleware('auth:sanctum')->get('/profile/{username}/favoriteGames', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getFavoriteGames'])->name("getFavoriteGames");

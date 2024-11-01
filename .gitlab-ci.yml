@@ -25,7 +25,7 @@ unit-test-job:
   #   CI_DEBUG_SERVICES: "true"
   script:
     # Launch tests
-    - docker exec -t gamehub-back-server-1 php artisan test
+    - docker exec -t gamehub-back-server-1 php artisan test --env=staging
   after_script:
     # Stop the Docker Compose services
     - docker compose --env-file "./.env.staging" --file "./docker-compose.yaml" down
@@ -40,8 +40,7 @@ send-discord-job:
   script:
     - export
     - apk add --no-cache curl
-    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"Tests have failed on branch $CI_COMMIT_REF_NAME : $CI_PIPELINE_URL\"}" $WEBHOOK_URL'
-    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"$GITLAB_USER_NAME on branch $CI_COMMIT_REF_NAME : $CI_PIPELINE_URL\"}" https://discord.com/api/webhooks/1300756703608049714/iZJi0Q__SRkWpO_eRCDUqWReJprGefMhWYuD0gAHTDOcX_Dlm0MJXPRVW6CpgXqDD3sd'
+    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"$GITLAB_USER_NAME est un mauvais codeur et a fail les tests sur la branche $CI_COMMIT_REF_NAME 👎 : $CI_PIPELINE_URL\"}" $WEBHOOK_URL'
   when: on_failure
 
 

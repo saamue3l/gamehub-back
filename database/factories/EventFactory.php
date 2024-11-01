@@ -21,7 +21,7 @@ class EventFactory extends Factory
     {
         parent::__construct($count, $states, $has, $for, $afterMaking, $afterCreating, $connection, $recycle);
 
-        $this->todaysDate = date("d/m/y H:i");
+        $this->todaysDate = date("c");
     }
 
     /**
@@ -44,7 +44,7 @@ class EventFactory extends Factory
 
         return [
             'name' => $randomGameName,
-            'description' => $this->faker->sentence(),
+            'description' => $this->faker->sentence(rand(5, 50)),
             'maxPlayers' => rand(2, 50),
             'eventDate' => $randomFutureDate,
             'creatorId' => User::inRandomOrder()->first()->id,
