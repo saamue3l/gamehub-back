@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,7 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Username extends Model
 {
-	protected $table = 'username';
+    use HasFactory;
+
+    protected $table = 'username';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -45,7 +48,6 @@ class Username extends Model
             'userId' => 'required|integer|exists:user,id',
         ];
     }
-
 
     public function platform()
 	{
