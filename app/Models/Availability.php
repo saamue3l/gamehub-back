@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -25,30 +26,32 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Availability extends Model
 {
-	protected $table = 'availability';
-	public $timestamps = false;
+    use HasFactory;
 
-	protected $casts = [
-		'morning' => 'bool',
-		'afternoon' => 'bool',
-		'evening' => 'bool',
-		'night' => 'bool',
-		'userId' => 'int'
-	];
+    protected $table = 'availability';
+    public $timestamps = false;
 
-	protected $fillable = [
-		'dayOfWeek',
-		'morning',
-		'afternoon',
-		'evening',
-		'night',
-		'userId'
-	];
+    protected $casts = [
+        'morning' => 'bool',
+        'afternoon' => 'bool',
+        'evening' => 'bool',
+        'night' => 'bool',
+        'userId' => 'int'
+    ];
+
+    protected $fillable = [
+        'dayOfWeek',
+        'morning',
+        'afternoon',
+        'evening',
+        'night',
+        'userId'
+    ];
 
     public static function rules(): array
     {
         return [
-            'dayOfWeek' => 'required|string|max:20',
+            'dayOfWeek' => 'required|string|in:Lun,Mar,Mer,Jeu,Ven,Sam,Dim',
             'morning' => 'nullable|boolean',
             'afternoon' => 'nullable|boolean',
             'evening' => 'nullable|boolean',
@@ -57,9 +60,8 @@ class Availability extends Model
         ];
     }
 
-
     public function user()
-	{
-		return $this->belongsTo(User::class, 'userId');
-	}
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
 }

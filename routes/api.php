@@ -41,12 +41,18 @@ Route::middleware('auth:sanctum')->post('/event/changeJoinedStatus/{event}', [\A
 Route::middleware('auth:sanctum')->get('/profile/{username}/favoriteGames', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getFavoriteGames'])->name("getFavoriteGames");
 Route::middleware('auth:sanctum')->get('/profile/{username}/userInfo', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserInfo'])->name("getUserInfo");
 Route::middleware('auth:sanctum')->get('/profile/{username}/userAlias', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserAlias'])->name("getUserAlias");
+Route::middleware('auth:sanctum')->get('/profile/{username}/userAvailability', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserAvailability'])->name("getUserAvailability");
 
+/* === FAVORITE GAMES === */
 Route::middleware('auth:sanctum')->post('/profile/addFavoriteGame', [\App\Http\Controllers\ProfileControllers\FavoriteGamesController::class, 'addFavoriteGame'])->name("addFavoriteGame");
 Route::middleware('auth:sanctum')->put('/profile/updateFavoriteGame', [\App\Http\Controllers\ProfileControllers\FavoriteGamesController::class, 'updateFavoriteGame'])->name("updateFavoriteGame");
 Route::middleware('auth:sanctum')->delete('/profile/deleteFavoriteGame', [\App\Http\Controllers\ProfileControllers\FavoriteGamesController::class, 'deleteFavoriteGame'])->name("deleteFavoriteGame");
 
+/* === USERNAME === */
 Route::middleware('auth:sanctum')->put('/profile/updateAlias', [\App\Http\Controllers\ProfileControllers\AliasController::class, 'updateAlias'])->name("updateAlias");
+
+/* === AVAILABILITY === */
+Route::middleware('auth:sanctum')->put('/profile/updateAvailability', [\App\Http\Controllers\ProfileControllers\AvailabilityController::class, 'updateAvailability'])->name("updateAvailability");
 
 /* === UTILS === */
 Route::middleware('auth:sanctum')->get('utils/allSkills', [\App\Http\Controllers\UtilsController::class, 'getAllSkills'])->name("getAllSkills");
