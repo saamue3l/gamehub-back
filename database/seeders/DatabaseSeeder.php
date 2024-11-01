@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             SkillSeeder::class,
             FavoriteGameSeeder::class,
             EventSeeder::class,
+            UsernameSeeder::class,
         ]);
     }
 }
