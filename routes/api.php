@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
@@ -22,8 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
 //Route::post('/match', [MatchController::class, 'match']);
 Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class, 'match']);
