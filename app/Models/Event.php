@@ -82,6 +82,10 @@ class Event extends Model
             throw new \Exception("Cet évènement a atteint le nombre maximum de participants");
         }
 
+        if ($this->eventDate < today()) {
+            throw new \Exception("Cet évènement a déjà eu lieu");
+        }
+
         // Attach the user to the event's participants if limit is not reached
         $this->participants()->attach($user->id);
     }
