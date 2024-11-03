@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class MatchController extends Controller
 {
-    public function match(Request $request)
+    public function match(Request $request): \Illuminate\Http\JsonResponse
     {
         //\Log::info('Authorization Header', ['header' => $request->header('Authorization')]);
         // Valider que le tableau des jeux est bien présent et correctement formaté
@@ -46,7 +46,9 @@ class MatchController extends Controller
                     'picture' => $user->picture,
                     'gamesQtyFound' => $user->favoriteGames->count(), // Compter les jeux favoris
                 ];
-            });
+            })
+            ->sortByDesc('gamesQtyFound')
+            ->values();
 
         // Si aucun utilisateur n'a été trouvé
         if ($users->isEmpty()) {

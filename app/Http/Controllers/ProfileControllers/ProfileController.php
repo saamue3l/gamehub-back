@@ -102,6 +102,32 @@ class ProfileController extends Controller
         return response()->json($aliasWithDetails);
     }
 
+    public function getUserAvailability($username): \Illuminate\Http\JsonResponse
+    {
+        $user = $this->getUserByUsername($username);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        $availability = \App\Models\Availability::where('userId', $user->id)->get();
+
+        $availabilityWithDetails = $availability->map(function ($availability) {
+            return [
+                'dayOfWeek' => $availability->dayOfWeek,
+                'morning' => $availability->morning,
+                'afternoon' => $availability->afternoon,
+                'evening' => $availability->evening,
+                'night' => $availability->night,
+            ];
+        });
+
+        return response()->json($availability);
+    }
+
     /**
      * @param $username
      * @return mixed

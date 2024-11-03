@@ -20,8 +20,6 @@ class AliasController
             ], 401);
         }
 
-        Log::log('info', 'UPDATE ALIAS: ', $request->toArray());
-
         $validatedData = $request->validate([
             '*' => 'required|array',
             '*.username' => 'required|string|max:255',
