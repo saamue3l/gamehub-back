@@ -105,7 +105,7 @@ class MatchmakingTest extends TestCase
         //Artisan::call('db:seed', ['--class' => 'UserSeeder']); // Appeler le seeder pour les utilisateurs
 
         // Utiliser le premier utilisateur par défaut
-        $user = User::first();
+        $user = User::find(4);
         Sanctum::actingAs(
             $user,
             ['*']
