@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\User::class, "userId")->constrained('user')->onDelete('cascade');
             $table->foreignId('typeId')->constrained('notification_types')->onDelete('cascade');
             $table->string('message');
-            $table->timestamp('read_at')->nullable();
+            $table->timestamp('readAt')->nullable();
+            $table->timestamp('processedAt')->nullable();
             $table->timestamps();
         });
     }

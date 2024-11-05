@@ -13,6 +13,12 @@ class LivechatTest extends TestCase
 {
     use DatabaseMigrations;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\NotificationTypeSeeder::class);
+    }
+
     public function testSendMessage()
     {
         $sender = User::factory()->create();
@@ -37,6 +43,8 @@ class LivechatTest extends TestCase
         $this->assertDatabaseHas('notifications', [
             'userId' => $recipient->id,
             'message' => 'You have a new message from ' . $sender->username,
+            'readAt' => null,
+            'processedAt' => null
         ]);
     }
 }

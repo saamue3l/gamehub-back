@@ -13,7 +13,8 @@ class Notification extends Model
         'userId',
         'typeId',
         'message',
-        'read_at',
+        'readAt',
+        'processedAt',
     ];
 
     public function user()

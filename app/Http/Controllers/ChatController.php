@@ -18,21 +18,23 @@ class ChatController extends Controller
             'recipientId' => 'required|exists:user,id',
         ]);
 
-        $message = Message::create([
+        Message::create([
             'senderId' => auth()->id(),
             'recipientId' => $request->input('recipientId'),
             'content' => $request->input('content'),
         ]);
 
-        $notificationType = NotificationType::where('name', 'NewMessageNotification')->first();
-
         Notification::create([
             'userId' => $request->recipientId,
-            'typeId' => $notificationType->id,
-            'message' => 'You have a new message from ' . $request->user()->username
+            'typeId' => 1,
+            'message' => 'You have a new message from ' . $request->user()->username,
+            'readAt' => null,
+            'processedAt' => null,
         ]);
 
-        return response()->json($message, 201);
+        return response()->json([
+            'status' => 'success',
+        ], 201);
     }
 
     public function getMessages(Request $request)
