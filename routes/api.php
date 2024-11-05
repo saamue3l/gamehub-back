@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MatchController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -56,3 +58,13 @@ Route::middleware('auth:sanctum')->put('/profile/updateAvailability', [\App\Http
 /* === UTILS === */
 Route::middleware('auth:sanctum')->get('utils/allSkills', [\App\Http\Controllers\UtilsController::class, 'getAllSkills'])->name("getAllSkills");
 Route::middleware('auth:sanctum')->get('utils/allPlatforms', [\App\Http\Controllers\UtilsController::class, 'getAllPlatforms'])->name("getAllPlatforms");
+
+/* === LIVECHAT === */
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/messages', [ChatController::class, 'sendMessage']);
+    Route::get('/messages', [ChatController::class, 'getMessages']);
+});
+
+/* === NOTIFICATIONS === */
+Route::middleware('auth:sanctum')->get('/notifications', [NotificationController::class, 'getNotifications']);
+Route::middleware('auth:sanctum')->post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
