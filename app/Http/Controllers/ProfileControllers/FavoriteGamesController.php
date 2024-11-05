@@ -23,7 +23,7 @@ class FavoriteGamesController
         $validatedData = $request->validate([
             'description' => 'required|string|max:255',
             'gameId' => 'required|exists:game,id',
-            'skillId' => 'required|exists:skillType,id',
+            'skillId' => 'required|exists:skilltype,id',
         ]);
 
         $favoriteGame = new FavoriteGame();
