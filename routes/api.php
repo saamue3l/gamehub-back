@@ -19,9 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/* === USERS === */
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware('auth:sanctum')->post('/user/searchUsers', [\App\Http\Controllers\UserController::class, 'searchUser'])->name("searchUsers");
+
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);

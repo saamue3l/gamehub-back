@@ -137,6 +137,10 @@ return [
             \App\Models\Game::class => [
                 'filterableAttributes'=> ['id', 'name'],
                 'sortableAttributes' => ['id', 'name'],
+            ],
+            \App\Models\User::class => [
+                'filterableAttributes'=> ['id', 'username'],
+                'sortableAttributes' => ['id', 'username'],
             ]
         ],
     ],
