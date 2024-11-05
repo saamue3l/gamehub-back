@@ -27,6 +27,9 @@ class MatchController extends Controller
         // Extraire les jeux demandés
         $requestedGames = collect($validated);
 
+        // Récupérer l'ID de l'user pour enlever ça des résultats
+        $currentUserId = $request->user()->id;
+
         // Récupérer les utilisateurs avec les jeux correspondants
         $users = User::where('statusId', 1) // Filtrer les utilisateurs actifs (non bannis)
         ->whereHas('favoriteGames', function($query) use ($requestedGames) {
@@ -46,6 +49,9 @@ class MatchController extends Controller
                     'picture' => $user->picture,
                     'gamesQtyFound' => $user->favoriteGames->count(), // Compter les jeux favoris
                 ];
+            })
+            ->filter(function ($user) use ($currentUserId) {
+                return $user['userId'] !== $currentUserId;
             })
             ->sortByDesc('gamesQtyFound')
             ->values();
