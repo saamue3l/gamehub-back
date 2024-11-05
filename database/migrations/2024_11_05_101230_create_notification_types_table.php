@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('notification_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class, "userId")->constrained('user')->onDelete('cascade');
-            $table->foreignId('typeId')->constrained('notification_types')->onDelete('cascade');
-            $table->string('message');
-            $table->timestamp('read_at')->nullable();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('notification_types');
     }
 };
