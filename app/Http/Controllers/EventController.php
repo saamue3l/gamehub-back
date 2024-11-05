@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Http\Discovery\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 
 class EventController extends Controller
 {
@@ -15,7 +16,8 @@ class EventController extends Controller
      * @param Request $request Can be empty, contain a gameId to filter or an eventDateStart and eventDateEnd to filter events
      * @return \Illuminate\Http\JsonResponse A list of events that pass through all of the given filters
      */
-    public function getAllEvents(Request $request) {
+    public function getAllEvents(Request $request): \Illuminate\Http\JsonResponse
+    {
         $eventsQuery = Event::with(['game', 'participants', 'creator']);
 
         // Apply a filter if a gameId is provided
@@ -26,6 +28,9 @@ class EventController extends Controller
         // Apply a filter if a date is provided
         if ($request->filled('eventDateStart') && $request->filled('eventDateEnd')) {
             $eventsQuery->whereBetween('eventDate', [$request->input("eventDateStart"), $request->input("eventDateEnd")]);
+        }
+        else {
+            $eventsQuery->where('eventDate', '>=', today());
         }
 
         $events = $eventsQuery->get();
