@@ -36,6 +36,9 @@ Route::middleware('auth:sanctum')->match(['GET', 'POST'], '/event/allEvents', [\
 Route::middleware('auth:sanctum')->post('/event/createEvent', [\App\Http\Controllers\EventController::class, 'createEvent'])->name("createEvent");
 Route::middleware('auth:sanctum')->post('/event/changeJoinedStatus/{event}', [\App\Http\Controllers\EventController::class, 'changeJoinedStatus'])->name("changeJoinedStatus");
 
+/* === FORUMS === */
+Route::middleware('auth:sanctum')->get('/forums/allForums', [\App\Http\Controllers\ForumController::class, 'getAllForums'])->name("getAllForums");
+
 /* === PROFILE === */
 Route::middleware('auth:sanctum')->get('/profile/{username}/favoriteGames', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getFavoriteGames'])->name("getFavoriteGames");
 Route::middleware('auth:sanctum')->get('/profile/{username}/userInfo', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserInfo'])->name("getUserInfo");
