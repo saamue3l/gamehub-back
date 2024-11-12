@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             UsernameSeeder::class,
             AvailabilitySeeder::class,
             NotificationTypeSeeder::class,
+            MessageSeeder::class,
         ]);
     }
 }

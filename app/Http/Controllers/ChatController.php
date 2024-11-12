@@ -8,6 +8,7 @@ use App\Models\NotificationType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\NewMessageNotification;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -37,10 +38,33 @@ class ChatController extends Controller
         ], 201);
     }
 
-    public function getMessages(Request $request)
+    public function getConversationUsers(Request $request)
     {
-        $messages = Message::where('senderId', $request->user()->id)
-            ->orWhere('recipientId', $request->user()->id)
+        $userId = Auth::id();
+        $userIds = Message::where('senderId', $userId)
+            ->orWhere('recipientId', $userId)
+            ->selectRaw('CASE WHEN senderId = ? THEN recipientId ELSE senderId END as user_id', [$userId])
+            ->distinct()
+            ->pluck('user_id');
+
+        $users = User::whereIn('id', $userIds)->get();
+
+        return response()->json($users);
+    }
+
+    public function getMessagesWithUser($userId)
+    {
+        $currentUserId = Auth::id();
+
+        $messages = Message::where(function($query) use ($currentUserId, $userId) {
+            $query->where('senderId', $currentUserId)
+                ->where('recipientId', $userId);
+        })
+            ->orWhere(function($query) use ($currentUserId, $userId) {
+                $query->where('senderId', $userId)
+                    ->where('recipientId', $currentUserId);
+            })
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return response()->json($messages);
