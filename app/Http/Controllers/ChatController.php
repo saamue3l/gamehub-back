@@ -79,4 +79,9 @@ class ChatController extends Controller
 
         return response()->json($messages);
     }
+
+    public function getCurrentUser() {
+        $currentUserId = Auth::id();
+        return response()->json($currentUserId);
+    }
 }
