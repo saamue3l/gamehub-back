@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageEvent;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\NotificationType;
@@ -9,15 +10,23 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\NewMessageNotification;
 use Illuminate\Support\Facades\Auth;
+use Mockery\Exception;
 
 class ChatController extends Controller
 {
+
+    //note: ici c'est la fonction qui crée l'event de message quand j'utilisais pusher,
+    //je laisse ça la on sait jamais
+    public function message(Request $request) {
+
+        event(new MessageEvent($request->username, $request->message));
+
+
+        return [];
+    }
+
     public function sendMessage(Request $request)
     {
-        $request->validate([
-            'content' => 'required|string',
-            'recipientId' => 'required|exists:user,id',
-        ]);
 
         Message::create([
             'senderId' => auth()->id(),
@@ -26,7 +35,7 @@ class ChatController extends Controller
         ]);
 
         Notification::create([
-            'userId' => $request->recipientId,
+            'userId' => $request->input('recipientId'),
             'typeId' => 1,
             'message' => 'You have a new message from ' . $request->user()->username,
             'readAt' => null,
@@ -37,6 +46,7 @@ class ChatController extends Controller
             'status' => 'success',
         ], 201);
     }
+
 
     public function getConversationUsers(Request $request)
     {

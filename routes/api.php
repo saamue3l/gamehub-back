@@ -64,9 +64,9 @@ Route::middleware('auth:sanctum')->get('utils/allPlatforms', [\App\Http\Controll
 
 /* === LIVECHAT === */
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/messages', [ChatController::class, 'sendMessage']);
     Route::get('/messages/{userId}', [ChatController::class, 'getMessagesWithUser']);
     Route::get('/userConversations', [ChatController::class, 'getConversationUsers']);
+    Route::post('/sendMessage', [ChatController::class, 'sendMessage']);
 });
 
 /* === NOTIFICATIONS === */
