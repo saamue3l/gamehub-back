@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,8 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Reaction extends Model
 {
+    use hasFactory;
+
 	protected $table = 'reaction';
 	public $timestamps = false;
+    protected $hidden = ['reactionTypeId', 'userId', 'postId'];
 
 	protected $casts = [
 		'reactionTypeId' => 'int',
