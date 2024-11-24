@@ -3,12 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\User;
-use Carbon\Carbon;
-use Http\Discovery\Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 
 class EventController extends Controller
 {
@@ -45,6 +40,13 @@ class EventController extends Controller
         });
 
         // Return the events with the "userJoined" field as JSON
+        return response()->json($events);
+    }
+
+    public function getUserSubscribedEvents(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = $request->user();
+        $events = $user->participations()->with('game', 'participants')->where('eventDate', '>=', today())->get();
         return response()->json($events);
     }
 
