@@ -6,7 +6,7 @@ FROM composer:lts as deps
 WORKDIR /
 COPY . .
 
-RUN composer update --no-interaction
+RUN composer update --no-interaction --ignore-platform-reqs
 RUN --mount=type=bind,source=composer.json,target=composer.json \
     --mount=type=bind,source=composer.lock,target=composer.lock \
     --mount=type=cache,target=/tmp/cache \
