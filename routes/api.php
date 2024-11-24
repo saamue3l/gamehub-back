@@ -59,3 +59,9 @@ Route::middleware('auth:sanctum')->put('/profile/updateAvailability', [\App\Http
 /* === UTILS === */
 Route::middleware('auth:sanctum')->get('utils/allSkills', [\App\Http\Controllers\UtilsController::class, 'getAllSkills'])->name("getAllSkills");
 Route::middleware('auth:sanctum')->get('utils/allPlatforms', [\App\Http\Controllers\UtilsController::class, 'getAllPlatforms'])->name("getAllPlatforms");
+
+
+/* === FALLBACK === */
+Route::fallback(function(){
+    return response()->json(['message' => 'Route not found.'], 404);
+})->name('api.fallback.404');

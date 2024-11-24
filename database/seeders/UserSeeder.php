@@ -16,5 +16,15 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()->count(10)->create();
+        // Admin
+        User::create([
+            'username' => 'Admin',
+            'email' => 'admin@gamehub.com',
+            'password' => Hash::make('password123'),
+            'picture' => null,
+            'xp' => 0,
+            'statusId' => 1,
+            'roleId' => 1,
+        ]);
     }
 }
