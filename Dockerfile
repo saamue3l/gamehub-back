@@ -8,7 +8,7 @@ COPY . .
 
 RUN --mount=type=bind,source=composer.json,target=composer.json \
     --mount=type=cache,target=/tmp/cache \
-    composer install --no-interaction --ignore-platform-reqs --no-dev
+    composer install --no-interaction --ignore-platform-reqs
 
 ################################################################################
 
