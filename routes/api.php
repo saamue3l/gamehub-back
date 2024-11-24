@@ -38,6 +38,21 @@ Route::middleware('auth:sanctum')->post('/event/changeJoinedStatus/{event}', [\A
 
 /* === FORUMS === */
 Route::middleware('auth:sanctum')->get('/forums/allForums', [\App\Http\Controllers\ForumController::class, 'getAllForums'])->name("getAllForums");
+Route::middleware('auth:sanctum')->post('/forums/createForum', [\App\Http\Controllers\ForumController::class, 'createForum'])->name("createForum");
+Route::middleware('auth:sanctum')->post('/forums/editForum/{forumId}', [\App\Http\Controllers\ForumController::class, 'editForum'])->name("editForum");
+Route::middleware('auth:sanctum')->post('/forums/removeForum/{forumId}', [\App\Http\Controllers\ForumController::class, 'removeForum'])->name("removeForum");
+Route::middleware('auth:sanctum')->get('/forums/getForum/{forumId}', [\App\Http\Controllers\ForumController::class, 'getForum'])->name("getForum");
+Route::middleware('auth:sanctum')->get('/forums/getTopic/{topicId}', [\App\Http\Controllers\ForumController::class, 'getTopic'])->name("getTopic");
+Route::middleware('auth:sanctum')->post('/forums/createTopic', [\App\Http\Controllers\ForumController::class, 'createTopic'])->name("createTopic");
+Route::middleware('auth:sanctum')->post('/forums/editTopic/{topicId}', [\App\Http\Controllers\ForumController::class, 'editTopic'])->name("editTopic");
+Route::middleware('auth:sanctum')->post('/forums/removeTopic/{topicId}', [\App\Http\Controllers\ForumController::class, 'removeTopic'])->name("removeTopic");
+Route::middleware('auth:sanctum')->post('/forums/createPost/{topicId}', [\App\Http\Controllers\ForumController::class, 'createPost'])->name("createPost");
+Route::middleware('auth:sanctum')->post('/forums/editPost/{postId}', [\App\Http\Controllers\ForumController::class, 'editPost'])->name("editPost");
+Route::middleware('auth:sanctum')->post('/forums/removePost/{postId}', [\App\Http\Controllers\ForumController::class, 'removePost'])->name("removePost");
+Route::middleware('auth:sanctum')->post('/forums/search', [\App\Http\Controllers\ForumController::class, 'searchInForums'])->name("searchInForums");
+/* Reaction */
+Route::middleware('auth:sanctum')->post('/forums/react/{post}', [\App\Http\Controllers\ReactionController::class, 'reactToPost'])->name("reactToPost");
+Route::middleware('auth:sanctum')->get('/forums/getAllReactionTypes', [\App\Http\Controllers\ReactionController::class, 'getAllReactionTypes'])->name("getAllReactionTypes");
 
 /* === PROFILE === */
 Route::middleware('auth:sanctum')->get('/profile/{username}/favoriteGames', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getFavoriteGames'])->name("getFavoriteGames");

@@ -64,6 +64,12 @@ class User extends Authenticatable
 		return $this->belongsTo(Role::class, 'roleId');
 	}
 
+    public function isAdmin(): bool
+    {
+        // TODO : make faster with cache, saving it somewhere or smth else
+        return $this->role()->first()->label == "Admin";
+    }
+
 	public function successes()
 	{
         return $this->belongsToMany(Success::class, "achievedsuccess", "userId", "successId")->withPivot("achievementDate");

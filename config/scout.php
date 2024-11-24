@@ -137,7 +137,15 @@ return [
             \App\Models\Game::class => [
                 'filterableAttributes'=> ['id', 'name'],
                 'sortableAttributes' => ['id', 'name'],
-            ]
+            ],
+            \App\Models\Topic::class => [
+                'filterableAttributes'=> ['id', 'title', 'visible'],
+                'sortableAttributes' => ['id', 'title'],
+            ],
+            \App\Models\Post::class => [
+                'filterableAttributes'=> ['id', 'content', 'creationDate', 'visible'],
+                'sortableAttributes' => ['id', 'content', 'creationDate'],
+            ],
         ],
     ],
 
