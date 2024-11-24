@@ -7,7 +7,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  * Class Topic
@@ -15,32 +17,31 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $title
  * @property int $forumId
- * @property int $creatorId
  * @property int $topicStatusId
  *
  * @property Forum $forum
- * @property User $user
- * @property TopicStatus $topicstatus
+ * @property User $users
  * @property Collection|Post[] $posts
  *
  * @package App\Models
  */
 class Topic extends Model
 {
+    use Searchable;
+    use hasFactory;
+
 	protected $table = 'topic';
 	public $timestamps = false;
 
 	protected $casts = [
 		'forumId' => 'int',
-		'creatorId' => 'int',
-		'topicStatusId' => 'int'
+		'creatorId' => 'int'
 	];
 
 	protected $fillable = [
 		'title',
 		'forumId',
-		'creatorId',
-		'topicStatusId'
+		'creatorId'
 	];
 
     public static function rules(): array
@@ -48,8 +49,7 @@ class Topic extends Model
         return [
             'title' => 'required|string|max:200',
             'forumId' => 'required|integer|exists:forum,id',
-            'creatorId' => 'required|integer|exists:user,id',
-            'topicStatusId' => 'required|integer|exists:topicstatus,id',
+            'creatorId' => 'required|integer|exists:user,id'
         ];
     }
 
@@ -62,11 +62,6 @@ class Topic extends Model
 	public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
 		return $this->belongsTo(User::class, 'creatorId');
-	}
-
-	public function topicstatus()
-	{
-		return $this->belongsTo(TopicStatus::class, 'topicStatusId');
 	}
 
 	public function posts()

@@ -8,7 +8,9 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  * Class Post
@@ -18,33 +20,32 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $creationDate
  * @property int $userId
  * @property int $topicId
- * @property int $postStatusId
  *
  * @property User $user
  * @property Topic $topic
- * @property PostStatus $poststatus
  * @property Collection|Reaction[] $reactions
  *
  * @package App\Models
  */
 class Post extends Model
 {
+    use Searchable;
+    use hasFactory;
+
 	protected $table = 'post';
 	public $timestamps = false;
 
 	protected $casts = [
 		'creationDate' => 'datetime',
 		'userId' => 'int',
-		'topicId' => 'int',
-		'postStatusId' => 'int'
+		'topicId' => 'int'
 	];
 
 	protected $fillable = [
 		'content',
 		'creationDate',
 		'userId',
-		'topicId',
-		'postStatusId'
+		'topicId'
 	];
 
     public static function rules(): array
@@ -53,8 +54,7 @@ class Post extends Model
             'content' => 'required|string',
             'creationDate' => 'nullable|date',
             'userId' => 'required|integer|exists:user,id',
-            'topicId' => 'required|integer|exists:topic,id',
-            'postStatusId' => 'required|integer|exists:poststatus,id',
+            'topicId' => 'required|integer|exists:topic,id'
         ];
     }
 
@@ -69,13 +69,37 @@ class Post extends Model
 		return $this->belongsTo(Topic::class, 'topicId');
 	}
 
-	public function poststatus()
-	{
-		return $this->belongsTo(PostStatus::class, 'postStatusId');
-	}
-
 	public function reactions()
 	{
 		return $this->hasMany(Reaction::class, 'postId');
 	}
+
+    public function getGroupedReactions()
+    {
+        return $this->reactions
+            ->groupBy('reactiontype.emoji')
+            ->map(function ($reactions, $emoji) {
+                return [
+                    'emoji' => $emoji,
+                    'users' => $reactions->pluck('user')->unique('id')->values()
+                ];
+            })
+            ->sortBy(function ($group) {
+                // Sort by reactiontype ID for consistent ordering
+                return $this->reactions
+                    ->firstWhere('reactiontype.emoji', $group['emoji'])
+                    ->reactiontype->id ?? 0;
+            })
+            ->values();
+    }
+
+    public function reactToPost(User $user, ReactionType $reactionType) {
+        return $this->reactions()->create(
+            [
+                "reactionTypeId" => $reactionType->id,
+                "userId" => $user->id,
+                "postId" => $this->id
+            ]
+        );
+    }
 }

@@ -31,7 +31,7 @@ class ReactionType extends Model
     public static function rules(): array
     {
         return [
-            'emoji' => 'required|string|max:10',
+            'emoji' => 'unique|required|string|max:10',
         ];
     }
 
