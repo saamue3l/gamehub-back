@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Reaction;
 use App\Models\ReactionType;
+use App\Services\SuccessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class ReactionController extends Controller
 {
+    protected SuccessService $successService;
+
+    public function __construct(SuccessService $successService)
+    {
+        $this->successService = $successService;
+    }
+
     public function reactToPost(Request $request, Post $post): \Illuminate\Http\JsonResponse
     {
         /* Get the emoji */
@@ -37,12 +45,22 @@ class ReactionController extends Controller
             catch (\Exception $e) {
                 return response()->json(['message' => $e->getMessage()], 400);
             }
+
+            $result = $this->successService->handleAction($user, 'REACT_TO_MESSAGE');
         }
         else { // Remove the reaction
             $currentReactedStatusQuery->delete();
+
+            $result = [
+                'xpGained' => null,
+                'newSuccess' => null
+            ];
         }
 
-        return response()->json(['userReacted' => !$currentReactedStatusExists]);
+        return response()->json([
+            'userReacted' => !$currentReactedStatusExists,
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']]);
     }
 
     private function getAvailableReactionTypes(): array

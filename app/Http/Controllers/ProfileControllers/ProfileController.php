@@ -75,6 +75,66 @@ class ProfileController extends Controller
         return response()->json($userInfo);
     }
 
+    public function getUserStats($username): \Illuminate\Http\JsonResponse
+    {
+        $user = $this->getUserByUsername($username);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        $postCount = $user->posts()
+            ->whereNotIn('id', function($query) {
+                $query->select('p1.id')
+                    ->from('post as p1')
+                    ->join('topic', 'topic.id', '=', 'p1.topicId')
+                    ->whereRaw('p1.userId = topic.creatorId')
+                    ->whereRaw('p1.creationDate = (
+                    SELECT MIN(p2.creationDate)
+                    FROM post as p2
+                    WHERE p2.topicId = p1.topicId
+                )');
+            })
+            ->count();
+
+        $stats = [
+            'success' => $user->successes()->count(),
+            'createdEvents' => $user->createdEvents()->count(),
+            'joinedEvents' => $user->participations()->count(),
+            'topic' => $user->createdTopics()->count(),
+            'post' => $postCount,
+            'reaction' => $user->reactions()->count(),
+        ];
+
+        return response()->json($stats);
+    }
+
+    public function getUserSuccess($username): \Illuminate\Http\JsonResponse
+    {
+        $user = $this->getUserByUsername($username);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        $successes = $user->successes()->get();
+
+        $successesWithDetails = $successes->map(function ($success) {
+            return [
+                'name' => $success->name,
+                'description' => $success->description,
+            ];
+        });
+
+        return response()->json($successesWithDetails);
+    }
+
     public function getUserAlias($username): \Illuminate\Http\JsonResponse
     {
         $user = $this->getUserByUsername($username);

@@ -20,9 +20,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SkillSeeder::class,
             FavoriteGameSeeder::class,
+            SuccessSeeder::class,
             EventSeeder::class,
             UsernameSeeder::class,
             AvailabilitySeeder::class,
+            ActionSeeder::class,
             /* === FORUM === */
             ForumSeeder::class,
             TopicSeeder::class,

@@ -19,4 +19,11 @@ class UtilsController extends Controller
 
         return response()->json($platforms);
     }
+
+    public function getAllSuccess(): \Illuminate\Http\JsonResponse
+    {
+        $successes = \App\Models\Success::all();
+
+        return response()->json($successes);
+    }
 }

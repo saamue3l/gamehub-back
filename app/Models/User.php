@@ -75,19 +75,20 @@ class User extends Authenticatable
         return $this->belongsToMany(Success::class, "achievedsuccess", "userId", "successId")->withPivot("achievementDate");
 	}
 
-	public function actions()
-	{
-		return $this->belongsToMany(Action::class, 'actionhistory', 'userId', 'actionId')->withPivot('actionDate');
-	}
+    public function actions()
+    {
+        return $this->belongsToMany(Action::class, 'actionhistory', 'userId', 'actionId')->withPivot('actionDate');
+    }
 
-	public function availabilities()
+
+    public function availabilities()
 	{
 		return $this->hasMany(Availability::class, 'userId');
 	}
 
 	public function createdEvents(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-		return $this->hasMany(Event::class, 'userId');
+		return $this->hasMany(Event::class, 'creatorId');
 	}
 
 	public function favoritegames()
@@ -112,7 +113,7 @@ class User extends Authenticatable
 
 	public function createdTopics()
 	{
-		return $this->hasMany(Topic::class, 'userId');
+		return $this->hasMany(Topic::class, 'creatorId');
 	}
 
 	public function gamesUsernames()

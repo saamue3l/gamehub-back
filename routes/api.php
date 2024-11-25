@@ -58,6 +58,8 @@ Route::middleware('auth:sanctum')->get('/forums/getAllReactionTypes', [\App\Http
 /* === PROFILE === */
 Route::middleware('auth:sanctum')->get('/profile/{username}/favoriteGames', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getFavoriteGames'])->name("getFavoriteGames");
 Route::middleware('auth:sanctum')->get('/profile/{username}/userInfo', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserInfo'])->name("getUserInfo");
+Route::middleware('auth:sanctum')->get('/profile/{username}/userStats', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserStats'])->name("getUserStats");
+Route::middleware('auth:sanctum')->get('/profile/{username}/userSuccess', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserSuccess'])->name("getUserSuccess");
 Route::middleware('auth:sanctum')->get('/profile/{username}/userAlias', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserAlias'])->name("getUserAlias");
 Route::middleware('auth:sanctum')->get('/profile/{username}/userAvailability', [\App\Http\Controllers\ProfileControllers\ProfileController::class, 'getUserAvailability'])->name("getUserAvailability");
 
@@ -75,6 +77,7 @@ Route::middleware('auth:sanctum')->put('/profile/updateAvailability', [\App\Http
 /* === UTILS === */
 Route::middleware('auth:sanctum')->get('utils/allSkills', [\App\Http\Controllers\UtilsController::class, 'getAllSkills'])->name("getAllSkills");
 Route::middleware('auth:sanctum')->get('utils/allPlatforms', [\App\Http\Controllers\UtilsController::class, 'getAllPlatforms'])->name("getAllPlatforms");
+Route::middleware('auth:sanctum')->get('utils/allSuccess', [\App\Http\Controllers\UtilsController::class, 'getAllSuccess'])->name("getAllSuccess");
 
 
 /* === FALLBACK === */
