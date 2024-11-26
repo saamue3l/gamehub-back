@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function searchUser(Request $request) {
+    public function searchUsers(Request $request) {
         if (isset($request->search)) {
             return User::search($request->search)->get();
         }
