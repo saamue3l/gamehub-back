@@ -27,7 +27,6 @@ class ChatController extends Controller
 
     public function sendMessage(Request $request)
     {
-
         Message::create([
             'senderId' => auth()->id(),
             'recipientId' => $request->input('recipientId'),
@@ -51,16 +50,36 @@ class ChatController extends Controller
     public function getConversationUsers(Request $request)
     {
         $userId = Auth::id();
-        $userIds = Message::where('senderId', $userId)
-            ->orWhere('recipientId', $userId)
-            ->selectRaw('CASE WHEN senderId = ? THEN recipientId ELSE senderId END as user_id', [$userId])
-            ->distinct()
-            ->pluck('user_id');
 
-        $users = User::whereIn('id', $userIds)->get();
+        // Récupérer les utilisateurs avec le dernier message
+        $userConversations = Message::where(function ($query) use ($userId) {
+            $query->where('senderId', $userId)
+                ->orWhere('recipientId', $userId);
+        })
+            ->with(['sender', 'recipient']) // Charger les relations des utilisateurs
+            ->get()
+            ->groupBy(function ($message) use ($userId) {
+                // Grouper par l'autre utilisateur dans la conversation
+                return $message->senderId === $userId ? $message->recipientId : $message->senderId;
+            })
+            ->map(function ($messages) {
+                // Trouver le message le plus récent pour chaque groupe
+                return $messages->sortByDesc('created_at')->first();
+            })
+            ->sortByDesc('created_at'); // Trier par date du dernier message
 
-        return response()->json($users);
+        // Récupérer les utilisateurs associés
+        $users = $userConversations->map(function ($message) use ($userId) {
+            $user = $message->senderId === $userId ? $message->recipient : $message->sender;
+            $user->last_message_date = $message->created_at;
+            return $user;
+        });
+
+        // Retourner la liste triée
+        return response()->json($users->values());
     }
+
+
 
     public function getMessagesWithUser($userId)
     {
