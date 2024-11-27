@@ -22,8 +22,6 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             UsernameSeeder::class,
             AvailabilitySeeder::class,
-            NotificationTypeSeeder::class,
-            MessageSeeder::class,
         ]);
     }
 }

@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class, 'senderId')->constrained('user')->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\User::class, 'recipientId')->constrained('user')->onDelete('cascade');
+            // Remarque : Nous remplaçons 'recipientId' par 'conversationId' pour relier le message à la conversation
+            $table->foreignId('conversationId')->constrained('conversations')->onDelete('cascade');
+            $table->foreignId('senderId')->constrained('user')->onDelete('cascade'); // Relier à la table 'user'
             $table->text('content');
             $table->timestamps();
         });

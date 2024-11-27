@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RegisterController;
@@ -64,6 +65,10 @@ Route::middleware('auth:sanctum')->get('utils/allPlatforms', [\App\Http\Controll
 
 /* === LIVECHAT === */
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/conversations/createConversation', [ConversationController::class, 'createConversation']);
+    Route::get('/conversations/getConversations', [ConversationController::class, 'getUserConversations']);
+    Route::get('/conversations/{conversationId}/getMessages', [ConversationController::class, 'getConversationMessages']);
+    Route::post('/conversations/{conversationId}/sendMessage', [ConversationController::class, 'sendMessage']);
     Route::get('/messages/{userId}', [ChatController::class, 'getMessagesWithUser']);
     Route::get('/userConversations', [ChatController::class, 'getConversationUsers']);
     Route::get('currentUser', [ChatController::class, 'getCurrentUser'] );

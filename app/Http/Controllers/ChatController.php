@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageEvent;
+use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\NotificationType;
@@ -25,6 +26,7 @@ class ChatController extends Controller
         return [];
     }
 
+    /*
     public function sendMessage(Request $request)
     {
         Message::create([
@@ -44,6 +46,22 @@ class ChatController extends Controller
         return response()->json([
             'status' => 'success',
         ], 201);
+    }*/
+
+    public function sendMessage(Request $request, $conversationId)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        $conversation = Conversation::findOrFail($conversationId);
+
+        $message = $conversation->messages()->create([
+            'senderId' => auth()->id(),
+            'content' => $request->input('content'),
+        ]);
+
+        return response()->json($message, 201);
     }
 
 
@@ -81,6 +99,7 @@ class ChatController extends Controller
 
 
 
+    /*
     public function getMessagesWithUser($userId)
     {
         $currentUserId = Auth::id();
@@ -98,6 +117,7 @@ class ChatController extends Controller
 
         return response()->json($messages);
     }
+    */
 
     public function getCurrentUser() {
         $currentUserId = Auth::id();
