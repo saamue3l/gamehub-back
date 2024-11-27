@@ -66,8 +66,9 @@ class ProfileController extends Controller
         }
 
         $userInfo = [
+            'id' => $user->id,
             'username' => $user->username,
-            'picture' => url('storage/' . $user->picture),
+            'picture' => $user->picture ? url('storage/' . $user->picture) : null,
             'level' => $level,
             'xp' => $xp,
         ];

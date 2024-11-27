@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@gamehub.com',
             'password' => Hash::make('password123'),
             'picture' => null,
-            'xp' => 0,
+            'xp' => 100,
             'statusId' => 1,
             'roleId' => 1,
         ]);

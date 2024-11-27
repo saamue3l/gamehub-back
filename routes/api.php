@@ -89,6 +89,10 @@ Route::middleware('auth:sanctum')->post('/user/update', [\App\Http\Controllers\U
 Route::middleware('auth:sanctum')->get('utils/allSkills', [\App\Http\Controllers\UtilsController::class, 'getAllSkills'])->name("getAllSkills");
 Route::middleware('auth:sanctum')->get('utils/allPlatforms', [\App\Http\Controllers\UtilsController::class, 'getAllPlatforms'])->name("getAllPlatforms");
 Route::middleware('auth:sanctum')->get('utils/allSuccess', [\App\Http\Controllers\UtilsController::class, 'getAllSuccess'])->name("getAllSuccess");
+Route::middleware('auth:sanctum')->get('/utils/getUserById/{id}', [
+    \App\Http\Controllers\UtilsController::class,
+    'getUserById'
+])->name("getUserById");
 
 /* === LIVECHAT === */
 Route::middleware('auth:sanctum')->group(function () {

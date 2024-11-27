@@ -233,20 +233,30 @@ class UserController extends Controller
         }
     }
 
-    public function searchUsers(Request $request): \Illuminate\Database\Eloquent\Collection|JsonResponse
+    public function searchUsers(Request $request): JsonResponse
     {
         if (isset($request->search)) {
             $currentUserId = Auth::id();
 
-            return User::search($request->search, function ($meilisearch, $query, $options) use ($currentUserId) {
+            $users = User::search($request->search, function ($meilisearch, $query, $options) use ($currentUserId) {
                 $options['filter'] = 'id != ' . $currentUserId;
                 return $meilisearch->search($query, $options);
             })->get();
-        } else {
-            return response()->json([
-                'message' => 'The search must include a body with "search" as key.'
-            ], 400);
+
+            $usersWithFullImageUrl = $users->map(function ($user) {
+                $userData = $user->toArray();
+                if ($user->picture) {
+                    $userData['picture'] = url('storage/' . $user->picture);
+                }
+                return $userData;
+            });
+
+            return response()->json($usersWithFullImageUrl);
         }
+
+        return response()->json([
+            'message' => 'The search must include a body with "search" as key.'
+        ], 400);
     }
 
 }
