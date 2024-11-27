@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageEvent;
+use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\Notification;
@@ -150,6 +151,10 @@ class ConversationController extends Controller
 
         // Mettre à jour la conversation (mettre à jour la date de dernière modification)
         $conversation->touch(); // Cela met à jour le champ `updated_at`
+
+        // Diffuser l'événement
+        event(new MessageSent($message));
+
 
         // Retourner le message créé
         return response()->json($message, 201);
