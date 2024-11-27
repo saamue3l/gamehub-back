@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\ProfileControllers;
 
 use App\Models\Username;
+use App\Services\SuccessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class AliasController
 {
+    protected SuccessService $successService;
+
+    public function __construct(SuccessService $successService)
+    {
+        $this->successService = $successService;
+    }
+
     public function updateAlias(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
@@ -30,6 +38,8 @@ class AliasController
 
         $existingUsernames = Username::where('userId', $user->id)->get();
 
+        $newUsernameCount = 0;
+
         foreach ($validatedData as $usernameData) {
             $username = $existingUsernames->firstWhere('platformId', $usernameData['platformId']);
 
@@ -37,6 +47,7 @@ class AliasController
                 $username = new Username();
                 $username->userId = $user->id;
                 $username->platformId = $usernameData['platformId'];
+                $newUsernameCount++;
             }
 
             $username->username = $usernameData['username'];
@@ -45,11 +56,20 @@ class AliasController
 
         Username::where('userId', $user->id)
             ->whereNotIn('platformId', $platformIds)
-            ->delete();
+            ->update(['username' => '']);
+
+        if ($newUsernameCount > 0) {
+            $result = $this->successService->handleNewAliases($user, $newUsernameCount);
+        } else {
+            $result = [
+                'xpGained' => null,
+                'newSuccess' => null
+            ];
+        }
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Usernames updated successfully'
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']
         ]);
     }
 }

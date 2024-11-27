@@ -5,11 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use App\Services\SuccessService;
 
 class RegisterController extends Controller
 {
-    public function register(Request $request)
+    protected SuccessService $successService;
+
+    public function __construct(SuccessService $successService)
+    {
+        $this->successService = $successService;
+    }
+
+    public function register(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:50|unique:user,username',
@@ -28,11 +35,12 @@ class RegisterController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'xp' => 0,
+            'xp' => 100,
             'statusId' => 1,
             'roleId' => 2,
         ]);
 
+        $this->successService->unlockSuccess($user, 'Premiers pas');
 
         return response()->json([
             'message' => 'Inscription réussie',

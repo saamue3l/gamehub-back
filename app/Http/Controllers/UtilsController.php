@@ -19,4 +19,25 @@ class UtilsController extends Controller
 
         return response()->json($platforms);
     }
+
+    public function getAllSuccess(): \Illuminate\Http\JsonResponse
+    {
+        $successes = \App\Models\Success::all();
+
+        return response()->json($successes);
+    }
+
+    public function getUserById($id): \Illuminate\Http\JsonResponse
+    {
+        $user = \App\Models\User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        return response()->json($user);
+    }
 }

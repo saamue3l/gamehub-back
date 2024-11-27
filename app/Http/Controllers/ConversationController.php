@@ -91,8 +91,9 @@ class ConversationController extends Controller
             // - Si un seul participant, utiliser son champ 'picture'
             // - Sinon, utiliser une image générique
             $picture = $participants->count() === 1
-                ? $participants->first()->picture // Image du seul participant
+                ? $participants->first()->picture ? url('storage/' . $participants->first()->picture) : null // Image du seul participant
                 : "https://png.pngtree.com/png-vector/20191009/ourlarge/pngtree-group-icon-png-image_1796653.jpg";
+
 
             return [
                 'conversationId' => $conversation->id, // ID de la conversation

@@ -3,12 +3,22 @@
 namespace App\Http\Controllers\ProfileControllers;
 
 use App\Models\Availability;
+use App\Models\ActionHistory;
+use App\Services\SuccessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class AvailabilityController
 {
+    protected SuccessService $successService;
+
+    public function __construct(SuccessService $successService)
+    {
+        $this->successService = $successService;
+    }
+
     public function updateAvailability(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
@@ -18,6 +28,19 @@ class AvailabilityController
                 'status' => 'error',
                 'message' => 'User not authenticated'
             ], 401);
+        }
+
+        $lastAction = ActionHistory::where('userId', $user->id)
+            ->whereHas('action', function ($query) {
+                $query->where('actionType', 'UPDATE_AVAILABILITY');
+            })
+            ->orderBy('actionDate', 'desc')
+            ->first();
+
+        $canGainXP = true;
+
+        if ($lastAction && Carbon::parse($lastAction->actionDate)->diffInSeconds(now()) < 60) {
+            $canGainXP = false;
         }
 
         $validatedData = $request->validate([
@@ -53,9 +76,18 @@ class AvailabilityController
             ->whereNotIn('dayOfWeek', $daysOfWeek)
             ->delete();
 
+        if ($canGainXP) {
+            $result = $this->successService->handleAction($user, 'UPDATE_AVAILABILITY');
+        } else {
+            $result = [
+                'xpGained' => null,
+                'newSuccess' => null
+            ];
+        }
+
         return response()->json([
-            'status' => 'success',
-            'message' => 'Availability updated successfully'
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']
         ]);
     }
 }

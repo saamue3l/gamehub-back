@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\ProfileControllers;
 
 use App\Models\FavoriteGame;
+use App\Services\SuccessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class FavoriteGamesController
 {
+    protected SuccessService $successService;
+
+    public function __construct(SuccessService $successService)
+    {
+        $this->successService = $successService;
+    }
+
     public function addFavoriteGame(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
@@ -33,7 +41,13 @@ class FavoriteGamesController
         $favoriteGame->description = $validatedData['description'];
         $favoriteGame->save();
 
-        return response()->json($favoriteGame->id);
+        $result = $this->successService->handleAction($user, 'ADD_GAME');
+
+        return response()->json([
+            'favoriteGameId' => $favoriteGame->id,
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']
+        ]);
     }
 
     public function updateFavoriteGame(Request $request): \Illuminate\Http\JsonResponse

@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
+use App\Services\SuccessService;
+use Carbon\Carbon;
+use Http\Discovery\Exception;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
+    protected SuccessService $successService;
+
+    public function __construct(SuccessService $successService)
+    {
+        $this->successService = $successService;
+    }
+
     /**
      * @param Request $request Can be empty, contain a gameId to filter or an eventDateStart and eventDateEnd to filter events
      * @return \Illuminate\Http\JsonResponse A list of events that pass through all of the given filters
@@ -59,7 +70,13 @@ class EventController extends Controller
             "creatorId" => $request->user()->id,
             "gameId" => $request->input("gameId"),
         ]);
-        return response()->json([], 200);
+
+        $result = $this->successService->handleAction($request->user(), 'CREATE_EVENT');
+
+        return response()->json([
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']
+        ], 200);
     }
 
     public function changeJoinedStatus(Request $request, Event $event) {
@@ -69,15 +86,27 @@ class EventController extends Controller
         if (!$currentJoinStatus) {
             try {
                 $event->addParticipant($user);
+
             }
             catch (\Exception $e) {
                 return response()->json(['message' => $e->getMessage()], 400);
             }
+
+            $result = $this->successService->handleAction($user, 'JOIN_EVENT');
         }
         else { // Remove the participation
             $user->participations()->detach($event->id);
+
+            $result = [
+                'xpGained' => null,
+                'newSuccess' => null
+            ];
         }
 
-        return response()->json(['userJoined' => !$currentJoinStatus]);
+        return response()->json([
+            'userJoined' => !$currentJoinStatus,
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']
+        ]);
     }
 }

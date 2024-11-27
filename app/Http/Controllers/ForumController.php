@@ -7,6 +7,7 @@ use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use App\Services\SuccessService;
 use Carbon\Carbon;
 use Http\Discovery\Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +18,13 @@ use Illuminate\Support\Facades\Date;
 
 class ForumController extends Controller
 {
+    protected SuccessService $successService;
+
+    public function __construct(SuccessService $successService)
+    {
+        $this->successService = $successService;
+    }
+
     /**
      * @param Request $request Empty
      * @return \Illuminate\Http\JsonResponse The list of all of the forums
@@ -182,7 +190,13 @@ class ForumController extends Controller
         $post->userId = $user->id;
         $post->save();
 
-        return response()->json(['message' => 'Nouveau sujet créé', 'topicId' => $topic->id]);
+        $result = $this->successService->handleAction($user, 'CREATE_TOPIC');
+
+        return response()->json([
+            'message' => 'Nouveau sujet créé',
+            'topicId' => $topic->id,
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']]);
     }
 
     public function editTopic(Request $request, int $topicId) {
@@ -244,7 +258,13 @@ class ForumController extends Controller
         $post->userId = $user->id;
         $post->save();
 
-        return response()->json(['message' => 'Post ajouté', 'postId' => $post->id]);
+        $result = $this->successService->handleAction($user, 'POST_MESSAGE');
+
+        return response()->json([
+            'message' => 'Post ajouté',
+            'postId' => $post->id,
+            'xpGained' => $result['xpGained'],
+            'newSuccess' => $result['newSuccess']]);
     }
 
     public function editPost(Request $request, int $postId): \Illuminate\Http\JsonResponse
