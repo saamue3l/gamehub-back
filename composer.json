@@ -13,7 +13,8 @@
         "laravel/scout": "^10.11",
         "laravel/tinker": "^2.8",
         "meilisearch/meilisearch-php": "^1.11",
-        "reliese/laravel": "^1.3"
+        "reliese/laravel": "^1.3",
+        "ext-gd": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

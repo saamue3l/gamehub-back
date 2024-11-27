@@ -13,13 +13,17 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
             $token = $user->createToken('token-name')->plainTextToken;
+
+            $userData = $user->toArray();
+            if ($user->picture) {
+                $userData['picture'] = url('storage/' . $user->picture);
+            }
 
             return response()->json([
                 'message' => 'Connexion réussie',
                 'token' => $token,
-                'user' => $user,
+                'user' => $userData,
             ]);
         } else {
             return response()->json([

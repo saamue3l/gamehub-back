@@ -195,4 +195,32 @@ class SuccessService
     {
         return $user->successes()->count();
     }
+
+    public function handleNewAliases(Authenticatable $user, int $newAliasCount): array
+    {
+        $result = [
+            'xpGained' => 0,
+            'newSuccess' => null
+        ];
+
+        if ($newAliasCount <= 0) {
+            return $result;
+        }
+
+        // Appeler handleAction pour chaque nouvel alias
+        for ($i = 0; $i < $newAliasCount; $i++) {
+            $actionResult = $this->handleAction($user, 'UPDATE_ALIAS');
+
+            if ($actionResult['xpGained']) {
+                $result['xpGained'] += $actionResult['xpGained'];
+            }
+
+            // Garder uniquement le dernier succès obtenu s'il y en a
+            if ($actionResult['newSuccess']) {
+                $result['newSuccess'] = $actionResult['newSuccess'];
+            }
+        }
+
+        return $result;
+    }
 }

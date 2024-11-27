@@ -74,6 +74,11 @@ Route::middleware('auth:sanctum')->put('/profile/updateAlias', [\App\Http\Contro
 /* === AVAILABILITY === */
 Route::middleware('auth:sanctum')->put('/profile/updateAvailability', [\App\Http\Controllers\ProfileControllers\AvailabilityController::class, 'updateAvailability'])->name("updateAvailability");
 
+/* === PROFILE MODIFICATION === */
+Route::middleware('auth:sanctum')->get('/user/getUser', [\App\Http\Controllers\UserController::class, 'getUserForModification'])->name("getUserForModification");;
+Route::middleware('auth:sanctum')->post('/user/password', [\App\Http\Controllers\UserController::class, 'changePassword'])->name("changePassword");;
+Route::middleware('auth:sanctum')->post('/user/update', [\App\Http\Controllers\UserController::class, 'updateProfile']);
+
 /* === UTILS === */
 Route::middleware('auth:sanctum')->get('utils/allSkills', [\App\Http\Controllers\UtilsController::class, 'getAllSkills'])->name("getAllSkills");
 Route::middleware('auth:sanctum')->get('utils/allPlatforms', [\App\Http\Controllers\UtilsController::class, 'getAllPlatforms'])->name("getAllPlatforms");

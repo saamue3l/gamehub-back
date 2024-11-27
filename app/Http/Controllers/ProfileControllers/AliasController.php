@@ -38,7 +38,7 @@ class AliasController
 
         $existingUsernames = Username::where('userId', $user->id)->get();
 
-        $newRowCreated = false;
+        $newUsernameCount = 0;
 
         foreach ($validatedData as $usernameData) {
             $username = $existingUsernames->firstWhere('platformId', $usernameData['platformId']);
@@ -47,7 +47,7 @@ class AliasController
                 $username = new Username();
                 $username->userId = $user->id;
                 $username->platformId = $usernameData['platformId'];
-                $newRowCreated = true;
+                $newUsernameCount++;
             }
 
             $username->username = $usernameData['username'];
@@ -58,8 +58,8 @@ class AliasController
             ->whereNotIn('platformId', $platformIds)
             ->update(['username' => '']);
 
-        if ($newRowCreated) {
-            $result = $this->successService->handleAction($user, 'UPDATE_ALIAS');
+        if ($newUsernameCount > 0) {
+            $result = $this->successService->handleNewAliases($user, $newUsernameCount);
         } else {
             $result = [
                 'xpGained' => null,
