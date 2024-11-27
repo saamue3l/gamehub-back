@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ReactionType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,6 +23,12 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             UsernameSeeder::class,
             AvailabilitySeeder::class,
+            /* === FORUM === */
+            ForumSeeder::class,
+            TopicSeeder::class,
+            PostSeeder::class,
+            ReactionTypeSeeder::class,
+            ReactionSeeder::class
         ]);
     }
 }

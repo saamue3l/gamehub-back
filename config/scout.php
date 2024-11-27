@@ -142,6 +142,15 @@ return [
                 'filterableAttributes'=> ['id', 'username'],
                 'sortableAttributes' => ['id', 'username'],
             ]
+            ],
+            \App\Models\Topic::class => [
+                'filterableAttributes'=> ['id', 'title', 'visible'],
+                'sortableAttributes' => ['id', 'title'],
+            ],
+            \App\Models\Post::class => [
+                'filterableAttributes'=> ['id', 'content', 'creationDate', 'visible'],
+                'sortableAttributes' => ['id', 'content', 'creationDate'],
+            ],
         ],
     ],
 

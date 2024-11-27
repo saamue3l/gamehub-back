@@ -20,7 +20,7 @@ class UserFactory extends Factory
             'picture' => null,
             'xp' => 0,
             'statusId' => 1,
-            'roleId' => 1,
+            'roleId' => 2,
         ];
     }
 }

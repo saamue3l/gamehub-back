@@ -7,9 +7,8 @@ WORKDIR /
 COPY . .
 
 RUN --mount=type=bind,source=composer.json,target=composer.json \
-    --mount=type=bind,source=composer.lock,target=composer.lock \
     --mount=type=cache,target=/tmp/cache \
-    composer install --no-interaction
+    composer install --no-interaction --ignore-platform-reqs
 
 ################################################################################
 
