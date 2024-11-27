@@ -62,7 +62,7 @@ class MatchController extends Controller
                 'status' => 'success',
                 'message' => 'No users found matching the criteria.',
                 'matchResult' => [],
-            ], 200);
+            ], );
         }
 
         // Retourner les résultats
