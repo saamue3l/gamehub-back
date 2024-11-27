@@ -27,7 +27,7 @@ class RegisterController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => $validator->errors()
+                'message' => "Echec de la validation des champs utilisateurs"
             ], 422);
         }
 

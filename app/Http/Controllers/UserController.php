@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -83,6 +85,9 @@ class UserController extends Controller
                     imagealphablending($square, false);
                     imagesavealpha($square, true);
                 }
+    public function searchUsers(Request $request) {
+        if (isset($request->search)) {
+            $currentUserId = Auth::id();
 
                 // Calculer le ratio pour le recadrage
                 $ratio = max($size / $width, $size / $height);
@@ -214,6 +219,16 @@ class UserController extends Controller
                     'message' => 'Le mot de passe actuel est incorrect'
                 ], 422);
             }
+            return User::search($request->search, function ($meilisearch, $query, $options) use ($currentUserId) {
+                $options['filter'] = 'id != ' . $currentUserId;
+                return $meilisearch->search($query, $options);
+            })->get();
+        } else {
+            return response()->json([
+                'message' => 'The search must include a body with "search" as key.'
+            ], 400);
+        }
+    }
 
             // Mettre à jour le mot de passe
             $user->update([
