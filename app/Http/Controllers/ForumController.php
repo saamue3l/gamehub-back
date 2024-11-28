@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Storage;
 
 class ForumController extends Controller
 {
@@ -123,6 +124,14 @@ class ForumController extends Controller
             });
         }
 
+        $forum->topics->each(function ($topic) {
+            if ($topic->creator && $topic->creator->picture) {
+                if (!str_starts_with($topic->creator->picture, 'storage/') && !str_starts_with($topic->creator->picture, '/storage/')) {
+                    $topic->creator->picture = url('storage/' . $topic->creator->picture);
+                }
+            }
+        });
+
         return response()->json($forum);
     }
 
@@ -150,6 +159,14 @@ class ForumController extends Controller
             // Hide the "visible" field for non-admin users
             if (!request()->user()->isAdmin()) {
                 $post->makeHidden(['visible']);
+            }
+        });
+
+        $topic->posts->each(function ($post) {
+            if ($post->user && $post->user->picture) {
+                if (!str_starts_with($post->user->picture, 'storage/') && !str_starts_with($post->user->picture, '/storage/')) {
+                    $post->user->picture = url('storage/' . $post->user->picture);
+                }
             }
         });
 
