@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('conversationId')->constrained('conversations')->onDelete('cascade');
             $table->foreignId('senderId')->constrained('user')->onDelete('cascade'); // Relier à la table 'user'
             $table->text('content');
+            $table->boolean('isRead')->default(false);
             $table->timestamps();
         });
     }

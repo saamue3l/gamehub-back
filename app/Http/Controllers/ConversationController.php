@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\NewMessageNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Mockery\Exception;
 
 class ConversationController extends Controller
@@ -98,7 +99,8 @@ class ConversationController extends Controller
             return [
                 'conversationId' => $conversation->id, // ID de la conversation
                 'username' => $participantNames,          // Liste des noms des participants
-                'picture' => $picture,                // Image de profil ou générique
+                'picture' => $picture,
+                'unreadMessages' => $this->getUnreadMessagesCount($conversation->id)// Image de profil ou générique
             ];
         });
 
@@ -120,6 +122,8 @@ class ConversationController extends Controller
                 $query->orderBy('created_at', 'asc'); // Trie les messages par date
             }])
             ->findOrFail($conversationId); // Récupère la conversation ou renvoie une erreur
+
+        $this->markMessagesAsRead($conversationId);
 
         return response()->json($conversation->messages); // Retourne les messages
     }
@@ -153,11 +157,65 @@ class ConversationController extends Controller
         // Mettre à jour la conversation (mettre à jour la date de dernière modification)
         $conversation->touch(); // Cela met à jour le champ `updated_at`
 
-        // Diffuser l'événement
-        event(new MessageSent($message));
+        // Récupérer les utilisateurs de la conversation sauf l'envoyeur
+        $recipients = $conversation->users()
+            ->where('user.id', '!=', $userId)
+            ->pluck('user.id')
+            ->toArray();
 
+        // Diffuser l'événement
+        foreach ($recipients as $recipientId) {
+            Log::info('Broadcasting to user: ' . $recipientId);
+            event(new MessageSent([
+                'type' => 'NewMessage',
+                'conversationId' => $conversation->id,
+                'recipientId' => $recipientId, // Identifiant unique pour l'utilisateur concerné
+            ]));
+        }
 
         // Retourner le message créé
         return response()->json($message, 201);
     }
+
+    public function markMessagesAsRead($conversationId)
+    {
+        $userId = auth()->id(); // Identifiant de l'utilisateur connecté
+
+        // Récupérer tous les messages non lus de la conversation pour cet utilisateur
+        $messages = Message::where('conversationId', $conversationId)
+            ->where('isRead', false)
+            ->get();
+
+        // Marquer chaque message comme lu par l'utilisateur
+        foreach ($messages as $message) {
+            $message->markAsRead($userId);
+        }
+
+        return response()->json(['message' => 'Messages marqués comme lus']);
+    }
+
+    public function getUnreadMessagesCount($conversationId)
+    {
+        $unreadCount = Message::where('conversationId', $conversationId)
+            ->where('isRead', false)
+            ->where('senderId', '!=', auth()->id()) // Ne pas compter les messages envoyés par l'utilisateur
+            ->count();
+
+        return $unreadCount;
+    }
+
+    public function getUnreadConversationsCount()
+    {
+        $unreadConversationsCount = Conversation::whereHas('messages', function ($query) {
+            $query->where('isRead', false)
+                ->where('senderId', '!=', auth()->id());
+        })
+            ->whereHas('users', function ($query) {
+                $query->where('userId', auth()->id());
+            })
+            ->count();
+
+        return $unreadConversationsCount;
+    }
+
 }
