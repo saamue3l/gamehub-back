@@ -101,10 +101,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/conversations/{conversationId}/getMessages', [ConversationController::class, 'getConversationMessages']);
     Route::post('/conversations/{conversationId}/sendMessage', [ConversationController::class, 'sendMessage']);
     Route::get('/conversations/getUnreadConversations', [ConversationController::class, 'getUnreadConversationsCount']);
-    Route::get('/messages/{userId}', [ChatController::class, 'getMessagesWithUser']);
-    Route::get('/userConversations', [ChatController::class, 'getConversationUsers']);
+    //Route::get('/messages/{userId}', [ChatController::class, 'getMessagesWithUser']);
+    //Route::get('/userConversations', [ChatController::class, 'getConversationUsers']);
     Route::get('currentUser', [ChatController::class, 'getCurrentUser'] );
-    Route::post('/sendMessage', [ChatController::class, 'sendMessage']);
+    //Route::post('/sendMessage', [ChatController::class, 'sendMessage']);
 });
 
 /* === NOTIFICATIONS === */
