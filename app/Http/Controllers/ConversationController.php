@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MessageEvent;
 use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
-use App\Models\Notification;
-use App\Models\NotificationType;
-use App\Models\User;
 use Illuminate\Http\Request;
-use App\Notifications\NewMessageNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Mockery\Exception;
 
 class ConversationController extends Controller
 {
@@ -175,6 +169,11 @@ class ConversationController extends Controller
 
         // Retourner le message créé
         return response()->json($message, 201);
+    }
+
+    public function getCurrentUser() {
+        $currentUserId = Auth::id();
+        return response()->json($currentUserId);
     }
 
     public function markMessagesAsRead($conversationId)
