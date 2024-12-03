@@ -54,6 +54,16 @@ class EventController extends Controller
         return response()->json($events);
     }
 
+    public function getEvent(Request $request, int $eventId): \Illuminate\Http\JsonResponse
+    {
+        $event = Event::with('game', 'participants', 'creator')->where('id', $eventId)->first();
+        if (!$event) {
+            return response()->json(['message' => 'L\'évènement n\'existe pas'], 404);
+        }
+        $event->userJoined = $event->participants->contains($request->user());
+        return response()->json($event);
+    }
+
     public function getUserSubscribedEvents(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
@@ -62,7 +72,7 @@ class EventController extends Controller
     }
 
     public function createEvent(Request $request) {
-        Event::create([
+        $newEvent = Event::create([
             "name" => $request->input("name"),
             "description" => $request->input("description"),
             "maxPlayers" => $request->input("maxPlayers"),
@@ -71,12 +81,60 @@ class EventController extends Controller
             "gameId" => $request->input("gameId"),
         ]);
 
+        $newEvent->addParticipant($request->user());
+
         $result = $this->successService->handleAction($request->user(), 'CREATE_EVENT');
 
         return response()->json([
             'xpGained' => $result['xpGained'],
             'newSuccess' => $result['newSuccess']
         ], 200);
+    }
+
+    public function modifyEvent(Request $request, int $eventId): \Illuminate\Http\JsonResponse
+    {
+        $event = Event::find($eventId);
+
+        if (!$event->exists) {
+            return response()->json(['message' => 'L\'évènement n\'existe pas'], 404);
+        }
+
+        if ($event->creatorId !== $request->user()->id && !$request->user()->isAdmin()) {
+            return response()->json(['message' => "Vous n'êtes pas le créateur de l'évènement"], 403);
+        }
+
+        if ($event->eventDate < Carbon::now()) {
+            return response()->json(['message' => 'Vous ne pouvez pas modifier un évènement déjà passé'], 403);
+        }
+
+        if ($event->participants()->count() > $request->input("maxPlayers")) {
+            return response()->json(['message' => 'Vous ne pouvez pas réduire le nombre de participants en dessous du nombre actuel'], 403);
+        }
+
+        $event->update([
+            "name" => $request->input("name"),
+            "description" => $request->input("description"),
+            "maxPlayers" => $request->input("maxPlayers"),
+            "eventDate" => $request->input("eventDate"),
+            "gameId" => $request->input("gameId"),
+        ]);
+
+        return response()->json();
+    }
+
+    public function deleteEvent(Request $request, int $eventId): \Illuminate\Http\JsonResponse {
+        $event = Event::find($eventId);
+
+        if (!isset($event) || !$event->exists) {
+            return response()->json(['message' => 'L\'évènement n\'existe pas'], 404);
+        }
+
+        if ($event->creatorId !== $request->user()->id && !$request->user()->isAdmin()) {
+            return response()->json(['message' => "Vous n'êtes pas le créateur de l'évènement"], 403);
+        }
+
+        $event->delete();
+        return response()->json();
     }
 
     public function changeJoinedStatus(Request $request, Event $event) {

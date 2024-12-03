@@ -39,8 +39,11 @@ Route::middleware('auth:sanctum')->post('/game/searchGames', [\App\Http\Controll
 
 /* === EVENTS === */
 Route::middleware('auth:sanctum')->match(['GET', 'POST'], '/event/allEvents', [\App\Http\Controllers\EventController::class, 'getAllEvents'])->name("getAllEventsWFilters");
+Route::middleware('auth:sanctum')->get('/event/{eventId}', [\App\Http\Controllers\EventController::class, 'getEvent'])->name("getEvent");
 Route::middleware('auth:sanctum')->get( '/event/getUserSubscribedEvents', [\App\Http\Controllers\EventController::class, 'getUserSubscribedEvents'])->name("getUserSubscribedEvents");
 Route::middleware('auth:sanctum')->post('/event/createEvent', [\App\Http\Controllers\EventController::class, 'createEvent'])->name("createEvent");
+Route::middleware('auth:sanctum')->post('/event/modifyEvent/{eventId}', [\App\Http\Controllers\EventController::class, 'modifyEvent'])->name("modifyEvent");
+Route::middleware('auth:sanctum')->post('/event/deleteEvent/{eventId}', [\App\Http\Controllers\EventController::class, 'deleteEvent'])->name("deleteEvent");
 Route::middleware('auth:sanctum')->post('/event/changeJoinedStatus/{event}', [\App\Http\Controllers\EventController::class, 'changeJoinedStatus'])->name("changeJoinedStatus");
 
 /* === FORUMS === */

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
+use App\Models\User;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,6 +15,11 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        Event::factory()->count(30)->create();
+        $events = Event::factory()->count(30)->create();
+        foreach ($events as $event) {
+            $event->participants()->attach($event->creator);
+            // Attach between 0 and maxPlayers random participants to the event that are not the creator
+            $event->participants()->attach(User::inRandomOrder()->where('id', '!=', $event->creator->id)->limit(rand(0, $event->maxPlayers - 1))->get());
+        }
     }
 }

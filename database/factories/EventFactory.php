@@ -34,18 +34,15 @@ class EventFactory extends Factory
         $randomFutureDate = strtotime("+".rand(0, 30)." weeks", strtotime($this->todaysDate));
         $randomFutureDate = strtotime("+".rand(1, 7)." days", $randomFutureDate);
 
+        $randomNameTitle = ["LAN party", "Tournoi", "Rassemblement", "Rencontre", "Compétition", "Match", "Défi", "Rasso", "RP", "Roleplay", "Soirée", "Soirée jeu"];
+
         $randomGame = Game::inRandomOrder()->first();
-        if (rand(0,1) == 0) {
-            $randomGameName = "LAN party " . $randomGame->name;
-        }
-        else {
-            $randomGameName = "Tournoi " . $randomGame->name;
-        }
+        $randomName = $randomNameTitle[rand(0, sizeof($randomNameTitle)-1)] . " " . $randomGame->name;
 
         return [
-            'name' => $randomGameName,
+            'name' => $randomName,
             'description' => $this->faker->sentence(rand(5, 50)),
-            'maxPlayers' => rand(2, 50),
+            'maxPlayers' => rand(2, 20),
             'eventDate' => $randomFutureDate,
             'creatorId' => User::inRandomOrder()->first()->id,
             'gameId' => $randomGame->id,
