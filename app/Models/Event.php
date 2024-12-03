@@ -52,7 +52,7 @@ class Event extends Model
         return [
             'description' => 'nullable|string',
             'maxPlayers' => 'required|integer|min:1',
-            'eventDate' => 'required|date',
+            'eventDate' => 'required|date|after:today',
             'creatorId' => 'required|integer|exists:user,id',
             'gameId' => 'required|integer|exists:game,id',
         ];
