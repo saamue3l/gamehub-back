@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libpng-dev \
     libzip-dev \
+    libwebp-dev \
 #&& rm -rf /var/lib/apt/lists/* \
 #    && docker-php-ext-configure gd --with-freetype --with-jpeg \
 ##    && docker-php-ext-install -j$(nproc) gd \
@@ -31,9 +32,9 @@ RUN apt-get update \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install zip \
     && docker-php-ext-install gd \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
     && docker-php-source delete
+    #&& docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    #&& docker-php-ext-install -j$(nproc) gd \
 
 # Use the default production configuration for PHP runtime arguments, see
 # https://github.com/docker-library/docs/tree/master/php#configuration
