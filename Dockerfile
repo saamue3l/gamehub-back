@@ -29,6 +29,7 @@ RUN apt-get update \
     && docker-php-source extract \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install zip \
+    && docker-php-ext-install gd \
     && docker-php-source delete
 
 # Use the default production configuration for PHP runtime arguments, see
