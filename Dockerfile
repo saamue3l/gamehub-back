@@ -29,7 +29,7 @@ RUN apt-get update \
     && docker-php-source extract \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install zip \
-    && docker-php-ext-install gd \
+    && docker-php-ext-install gd --with-freetype --with-jpeg \
     && docker-php-source delete
 
 # Use the default production configuration for PHP runtime arguments, see
@@ -40,6 +40,9 @@ COPY . .
 # Copy the app dependencies from the previous install stage.
 COPY --from=deps /vendor/ /vendor
 RUN mv /${APP_ENV_FILE} /.env
+
+# Index meilisearch settings
+RUN php artisan scout:sync-index-settings
 
 EXPOSE 80
 CMD [ "php", "./artisan", "serve", "--no-interaction", "-vvv", "--port=80", "--host=0.0.0.0" ]
