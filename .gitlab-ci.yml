@@ -7,7 +7,7 @@ cache:
 
 default:
   tags:
-    - gamehub
+    - ue19
 
 stages:
   - test
