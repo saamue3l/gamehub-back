@@ -38,7 +38,7 @@ services:
     environment:
       MEILI_MASTER_KEY: ${MEILISEARCH_KEY}
     volumes:
-      - meilidate:/meili_data
+      - meilidata:/meili_data
 
 networks:
   default:
@@ -46,7 +46,7 @@ networks:
 volumes:
   dbdata:
     driver: local
-  meilidate:
+  meilidata:
     driver: local
   publicStorage:
     driver: local
