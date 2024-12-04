@@ -6,6 +6,7 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TokenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -97,6 +98,7 @@ Route::middleware('auth:sanctum')->get('/utils/getUserById/{id}', [
     \App\Http\Controllers\UtilsController::class,
     'getUserById'
 ])->name("getUserById");
+Route::middleware('auth:sanctum')->get('/verify-token', [TokenController::class, 'verify']);
 
 /* === LIVECHAT === */
 Route::middleware('auth:sanctum')->group(function () {
