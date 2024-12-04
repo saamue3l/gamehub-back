@@ -8,6 +8,8 @@ services:
     pull_policy: build
     restart: unless-stopped
     tty: true
+    volumes:
+      - publicStorage:/storage/app/
     depends_on:
       db:
         condition: service_healthy
@@ -45,4 +47,6 @@ volumes:
   dbdata:
     driver: local
   meilidate:
+    driver: local
+  publicStorage:
     driver: local
