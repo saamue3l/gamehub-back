@@ -51,6 +51,9 @@ RUN php artisan scout:sync-index-settings
 # Link the storage directory to the public directory.
 RUN php artisan storage:link
 
+# Laravel optimization commands
+RUN php artisan config:cache && php artisan route:cache
+
 EXPOSE 80
 CMD [ "php", "./artisan", "serve", "--no-interaction", "-vvv", "--port=80", "--host=0.0.0.0" ]
 
