@@ -26,10 +26,10 @@ unit-test-job:
   #   CI_DEBUG_SERVICES: "true"
   script:
     # Launch tests
-    - docker exec -t ci-gamehub-back-server php artisan test --env=staging
+    - docker exec -t ${BACK_SERVER_CONTAINER_NAME} php artisan test --env=staging
   after_script:
     # Stop the Docker Compose services
-    - docker compose --env-file "./.env.staging" --file "./docker-compose.yaml" down
+    - docker compose --env-file "./.env.prod" --file "./docker-compose.yaml" down
   retry:
     max: 1
     when: always
