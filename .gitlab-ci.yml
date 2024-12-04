@@ -55,4 +55,4 @@ deploy-job:
     max: 2
     when: always
   only:
-    - master
+    - main
