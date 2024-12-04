@@ -20,6 +20,7 @@ unit-test-job:
     - docker:26.0.0-dind
   before_script:
     # Start the Docker Compose services
+    - export BACK_SERVER_CONTAINER_NAME=ci-gamehub-back-server
     - docker compose --project-name ci_test --env-file "./.env.staging" --file "./docker-compose.yaml" up -d --build
   # variables:
   #   CI_DEBUG_SERVICES: "true"

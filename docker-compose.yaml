@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: gamehub-back-server
+    container_name: ${BACK_SERVER_CONTAINER_NAME:-gamehub-back-server}
     pull_policy: build
     restart: unless-stopped
     tty: true
