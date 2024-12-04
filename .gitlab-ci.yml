@@ -20,7 +20,7 @@ unit-test-job:
     - docker:26.0.0-dind
   before_script:
     # Start the Docker Compose services
-    - docker compose --build-arg APP_ENV_FILE=.env.staging --env-file "./.env.staging" --file "./docker-compose.yaml" up -d --build
+    - docker compose --env-file "./.env.staging" --file "./docker-compose.yaml" up -d --build
   variables:
     CI_DEBUG_SERVICES: "true"
   script:

@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        APP_ENV_FILE: ${APP_ENV_FILE}
     container_name: gamehub-back-server
     pull_policy: build
     restart: unless-stopped
