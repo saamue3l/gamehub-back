@@ -12,7 +12,7 @@ default:
 stages:
   - test
   - post-test
-#  - deploy
+  - deploy
 
 unit-test-job:
   stage: test
@@ -43,16 +43,16 @@ send-discord-job:
     - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"$GITLAB_USER_NAME est un mauvais codeur et a fail les tests sur la branche $CI_COMMIT_REF_NAME 👎 : $CI_PIPELINE_URL\"}" $WEBHOOK_URL'
   when: on_failure
 
-
-#deploy-job:
-#  stage: deploy
-#  variables:
-#      GIT_STRATEGY: none
-#      GIT_CHECKOUT: "false"
-#  script:
-#    - wget --post-data "" https://test.salto.helmo.be/api/stacks/webhooks/a7140b5a-b0ce-4a8a-b744-a06868c2eb01
-#  retry:
-#    max: 2
-#    when: always
-#  only:
-#    - master
+deploy-job:
+  stage: deploy
+  interruptible: false
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+  script:
+    - wget --post-data "" https://portainer.matthiasg.dev/api/stacks/webhooks/4afd9f56-9092-4036-b5e6-b28d86ce93c1
+  retry:
+    max: 2
+    when: always
+  only:
+    - master
