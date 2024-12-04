@@ -7,10 +7,10 @@ cache:
 
 default:
   tags:
-    - ue19
+    - gamehub
 
 stages:
-  - test
+#  - test
   - post-test
   - deploy
 
