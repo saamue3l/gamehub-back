@@ -42,7 +42,7 @@ services:
 
 networks:
   default:
-    name: gamehub-default
+    name: ${NETWORK_NAME:-gamehub-default}
 volumes:
   dbdata:
     driver: local
