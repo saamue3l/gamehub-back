@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware('auth:sanctum')->post('/user/searchUsers', [\App\Http\Controllers\UserController::class, 'searchUsers']);
+Route::middleware('auth:sanctum')->get('/me', [\App\Http\Controllers\UserController::class, 'connectedUserInfo'])->name("connectedUserInfo");;
 
 
 Route::post('/login', [AuthController::class, 'login']);

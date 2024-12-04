@@ -70,6 +70,7 @@ class ProfileController extends Controller
             'username' => $user->username,
             'picture' => $user->picture ? url('storage/' . $user->picture) : null,
             'level' => $level,
+            'totalXp' => $totalXP,
             'xp' => $xp,
         ];
 

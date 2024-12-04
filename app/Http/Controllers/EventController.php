@@ -61,6 +61,11 @@ class EventController extends Controller
             return response()->json(['message' => 'L\'évènement n\'existe pas'], 404);
         }
         $event->userJoined = $event->participants->contains($request->user());
+
+        $event->participants->each(function ($participant) {
+            $participant->picture = $participant->picture ? url('storage/' . $participant->picture) : null;
+        });
+
         return response()->json($event);
     }
 

@@ -259,4 +259,23 @@ class UserController extends Controller
         ], 400);
     }
 
+
+    public function connectedUserInfo(): JsonResponse
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        return response()->json([
+            'username' => $user->username,
+            'xp' => $user->xp,
+            'profilePicture' => $user->picture ? url('storage/' . $user->picture) : null,
+            'roleId' => $user->roleId,
+        ]);
+    }
 }

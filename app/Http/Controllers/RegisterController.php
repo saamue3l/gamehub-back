@@ -23,11 +23,20 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:100|unique:user,email',
             'password' => 'required|string|min:6',
             'passwordConfirm' => 'required|string|same:password',
+        ], [
+            'username.unique' => 'Ce nom d\'utilisateur est déjà utilisé',
+            'email.unique' => 'Cette adresse email est déjà utilisée',
+            'username.required' => 'Le nom d\'utilisateur est requis',
+            'email.required' => 'L\'adresse email est requise',
+            'email.email' => 'L\'adresse email n\'est pas valide',
+            'password.required' => 'Le mot de passe est requis',
+            'password.min' => 'Le mot de passe doit contenir au moins 6 caractères',
+            'passwordConfirm.same' => 'Les mots de passe ne correspondent pas'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => "Echec de la validation des champs utilisateurs"
+                'message' => $validator->errors()->first()
             ], 422);
         }
 
