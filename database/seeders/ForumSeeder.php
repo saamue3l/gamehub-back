@@ -14,7 +14,7 @@ class ForumSeeder extends Seeder
     public function run(): void
     {
         Forum::insert([
-            ["name" => "Recommendations"],
+            ["name" => "Recommandations"],
             ["name" => "Game dev"],
             ["name" => "18-25"],
             ["name" => "Jeux solos"],

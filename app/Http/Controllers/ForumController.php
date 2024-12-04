@@ -42,6 +42,10 @@ class ForumController extends Controller
 
     public function createForum(Request $request): \Illuminate\Http\JsonResponse
     {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['message' => "Vous n'êtes pas autorisé à créer un forum"], 403);
+        }
+
         $request->validate([
             'name' => 'required|string',
         ]);
@@ -58,6 +62,10 @@ class ForumController extends Controller
 
     public function editForum(Request $request, int $forumId): \Illuminate\Http\JsonResponse
     {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['message' => "Vous n'êtes pas autorisé à éditer un forum"], 403);
+        }
+
         $forum = Forum::find($forumId);
         if ($forum === null) {
             return response()->json(['message' => "Le forum n'a pas été trouvé"], 404);
@@ -78,6 +86,10 @@ class ForumController extends Controller
 
     public function removeForum(Request $request, int $forumId): \Illuminate\Http\JsonResponse
     {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['message' => "Vous n'êtes pas autorisé à supprimer un forum"], 403);
+        }
+
         $forum = Forum::find($forumId);
         if ($forum === null) {
             return response()->json(['message' => "Le forum n'a pas été trouvé"], 404);
