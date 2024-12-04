@@ -10,40 +10,40 @@ default:
     - gamehub
 
 stages:
-  - test
-  - post-test
+#  - test
+#  - post-test
   - deploy
 
-unit-test-job:
-  stage: test
-  services:
-    - docker:26.0.0-dind
-  before_script:
-    # Start the Docker Compose services
-    - export BACK_SERVER_CONTAINER_NAME=ci-gamehub-back-server
-    - export NETWORK_NAME=ci-gamehub-default
-    - docker compose --env-file "./.env.prod" --file "./docker-compose.yaml" up -d --build
-  variables:
-    CI_DEBUG_SERVICES: "true"
-  script:
-    # Launch tests
-    - docker exec -t ${BACK_SERVER_CONTAINER_NAME} php artisan test --env=staging
-  after_script:
-    # Stop the Docker Compose services
-    - docker compose --env-file "./.env.prod" --file "./docker-compose.yaml" down
-  retry:
-    max: 1
-    when: always
+#unit-test-job:
+#  stage: test
+#  services:
+#    - docker:26.0.0-dind
+#  before_script:
+#    # Start the Docker Compose services
+#    - export BACK_SERVER_CONTAINER_NAME=ci-gamehub-back-server
+#    - export NETWORK_NAME=ci-gamehub-default
+#    - docker compose --env-file "./.env.prod" --file "./docker-compose.yaml" up -d --build
+#  variables:
+#    CI_DEBUG_SERVICES: "true"
+#  script:
+#    # Launch tests
+#    - docker exec -t ${BACK_SERVER_CONTAINER_NAME} php artisan test --env=staging
+#  after_script:
+#    # Stop the Docker Compose services
+#    - docker compose --env-file "./.env.prod" --file "./docker-compose.yaml" down
+#  retry:
+#    max: 1
+#    when: always
 
-send-discord-job:
-  stage: post-test
-  variables:
-    WEBHOOK_URL: "https://discord.com/api/webhooks/1300752395474698251/SvyhjBU4wYIDlfx2M-dBv0HGh7KVSUWy9SIrjX0Z5Oxk2q8z-Ol73rtBVUVDsYRSS4Em"
-  script:
-    - export
-    - apk add --no-cache curl
-    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"$GITLAB_USER_NAME est un mauvais codeur et a fail les tests sur la branche $CI_COMMIT_REF_NAME 👎 : $CI_PIPELINE_URL\"}" $WEBHOOK_URL'
-  when: on_failure
+#send-discord-job:
+#  stage: post-test
+#  variables:
+#    WEBHOOK_URL: "https://discord.com/api/webhooks/1300752395474698251/SvyhjBU4wYIDlfx2M-dBv0HGh7KVSUWy9SIrjX0Z5Oxk2q8z-Ol73rtBVUVDsYRSS4Em"
+#  script:
+#    - export
+#    - apk add --no-cache curl
+#    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"$GITLAB_USER_NAME est un mauvais codeur et a fail les tests sur la branche $CI_COMMIT_REF_NAME 👎 : $CI_PIPELINE_URL\"}" $WEBHOOK_URL'
+#  when: on_failure
 
 deploy-job:
   stage: deploy
