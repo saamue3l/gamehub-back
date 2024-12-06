@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\NotificationController;
@@ -29,9 +29,17 @@ Route::middleware('auth:sanctum')->post('/user/searchUsers', [\App\Http\Controll
 Route::middleware('auth:sanctum')->get('/me', [\App\Http\Controllers\UserController::class, 'connectedUserInfo'])->name("connectedUserInfo");;
 
 
+// Connexion via service tiers
+Route::middleware(['web'])->group(function () {
+    Route::get('/auth/google/redirect', [SocialiteController::class, 'redirectToGoogle']);
+    Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
+});
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
+
+
 //Route::post('/match', [MatchController::class, 'match']);
 Route::middleware('auth:sanctum')->post('/matchmaking', [MatchController::class, 'match']);
 
