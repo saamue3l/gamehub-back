@@ -45,9 +45,6 @@ COPY . .
 COPY --from=deps /vendor/ /vendor
 RUN mv /${APP_ENV_FILE} /.env
 
-# Index meilisearch settings
-RUN php artisan scout:sync-index-settings
-
 # Link the storage directory to the public directory.
 RUN php artisan storage:link
 
