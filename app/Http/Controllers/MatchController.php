@@ -46,7 +46,7 @@ class MatchController extends Controller
                     'userId' => $user->id,
                     'username' => $user->username,
                     'xp' => $user->xp,
-                    'picture' => $user->picture,
+                    'picture' => $user->picture ? url('storage/' . $user->picture) : null,
                     'gamesQtyFound' => $user->favoriteGames->count(), // Compter les jeux favoris
                 ];
             })
