@@ -1,0 +1,55 @@
+image: docker:26.0.0
+
+cache:
+  paths:
+    - node_modules/
+    - vendor/
+
+default:
+  tags:
+    - gamehub
+
+stages:
+  - test
+  - post-test
+  - deploy
+
+unit-test-job:
+  stage: test
+  services:
+    - docker:26.0.0-dind
+  before_script:
+    # Start the Docker Compose services
+    - docker compose --env-file "./.env.staging" --file "./docker-compose.yaml" build
+#  variables:
+#    CI_DEBUG_SERVICES: "true"
+  script:
+    # Launch tests
+    - docker compose --env-file "./.env.staging" --file "./docker-compose.yaml" run --rm server php artisan test
+  retry:
+    max: 1
+    when: always
+
+send-discord-job:
+  stage: post-test
+  variables:
+    WEBHOOK_URL: "https://discord.com/api/webhooks/1300752395474698251/SvyhjBU4wYIDlfx2M-dBv0HGh7KVSUWy9SIrjX0Z5Oxk2q8z-Ol73rtBVUVDsYRSS4Em"
+  script:
+    - export
+    - apk add --no-cache curl
+    - 'curl -H "Content-Type: application/json" -d "{\"username\": \"Gamehub git - back\", \"content\": \"$GITLAB_USER_NAME est un mauvais codeur et a fail les tests sur la branche $CI_COMMIT_REF_NAME 👎 : $CI_PIPELINE_URL\"}" $WEBHOOK_URL'
+  when: on_failure
+
+deploy-job:
+  stage: deploy
+  interruptible: false
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+  script:
+    - wget --post-data "" http://172.23.0.1:20000/api/stacks/webhooks/4afd9f56-9092-4036-b5e6-b28d86ce93c1
+  retry:
+    max: 2
+    when: always
+  only:
+    - main

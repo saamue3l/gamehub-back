@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Created by Reliese Model.
+ */
+
+namespace App\Models;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+
+class Event extends Model
+{
+    use HasFactory;
+
+	protected $table = 'event';
+	public $timestamps = false;
+
+	protected $casts = [
+		'maxPlayers' => 'int',
+		'eventDate' => 'datetime',
+		'creatorId' => 'int',
+		'gameId' => 'int'
+	];
+
+	protected $fillable = [
+        'name',
+		'description',
+		'maxPlayers',
+		'eventDate',
+		'creatorId',
+		'gameId'
+	];
+
+    public static function rules(): array
+    {
+        return [
+            'description' => 'nullable|string',
+            'maxPlayers' => 'required|integer|min:1',
+            'eventDate' => 'required|date|after:today',
+            'creatorId' => 'required|integer|exists:user,id',
+            'gameId' => 'required|integer|exists:game,id',
+        ];
+    }
+
+
+    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+		return $this->belongsTo(User::class, 'creatorId');
+	}
+
+    public function participants(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'participation', 'eventId', 'userId');
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    public function addParticipant(User $user)
+    {
+        if ($this->participants()->count() >= $this->maxPlayers) {
+            throw new \Exception("Cet évènement a atteint le nombre maximum de participants");
+        }
+
+        if ($this->eventDate < today()) {
+            throw new \Exception("Cet évènement a déjà eu lieu");
+        }
+
+        $this->participants()->attach($user->id);
+    }
+
+	public function game(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+		return $this->belongsTo(Game::class, 'gameId');
+	}
+}

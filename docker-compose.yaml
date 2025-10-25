@@ -1,0 +1,55 @@
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV_FILE: ${APP_ENV_FILE:-.env.prod}
+    container_name: gamehub-back-server
+    pull_policy: build
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - publicStorage:/storage/app/
+    depends_on:
+      db:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'db', '-u', '${DB_USERNAME}', '-p${DB_PASSWORD}' ]
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.11
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: ${MEILISEARCH_KEY}
+    volumes:
+      - meilidata:/meili_data
+
+networks:
+  default:
+    name: gamehub-default
+volumes:
+  dbdata:
+    driver: local
+  meilidata:
+    driver: local
+  publicStorage:
+    driver: local
