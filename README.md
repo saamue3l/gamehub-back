@@ -5,12 +5,12 @@ Backend Laravel d'une plateforme sociale gaming avec WebSockets et Meilisearch. 
 ## ✨ Fonctionnalités
 
 - APIs RESTful complètes
-- Chat WebSocket temps réel
 - Système d'XP et achievements
 - Authentification sécurisée
 - Recherche avancée avec Meilisearch
 - Notifications temps réel
 - Rating collaboratif des jeux
+- Chat WebSocket temps réel (messagerie fonctionnelle via profil utilisateur, mais buguée via recherche utilisateur pour le moment)
 
 ## 🛠️ Stack
 
